@@ -3,10 +3,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class User {
 	private String userID;
@@ -71,8 +75,20 @@ public class User {
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
-
 	
+	public ResultSet view() {
+			String sqlStatement = "SELECT * FROM users";
+			String [] parameters = {};
+			ResultSet rs = queryHelper(sqlStatement, parameters);
+			return rs;
+	}
+
+	public boolean updateInfo(String username, String password, String accountType) {
+		String sqlStatement = "UPDATE users SET userID = ?, username = ?, password = ?, accountType=?";
+		String[] parameters = {username,password,accountType};
+		int rows = createUpdateHelper(sqlStatement,parameters);
+		return rows>0;
+	}
 	//set up db connection
 	private Connection dbConnection() {
 		

@@ -227,39 +227,22 @@ public class AdminHome extends JFrame {
 		contentPane.add(ViewUsers);
 		ViewUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				try {
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/AndrewTateFanClub","root",""); 
-					Statement stmt = c.createStatement();
-					String sql = "Select * from users";
-					ResultSet rs = stmt.executeQuery(sql);
-					ResultSetMetaData rsmd = rs.getMetaData();
-					DefaultTableModel model = (DefaultTableModel) accTable.getModel();
-					
-					int cols = rsmd.getColumnCount();
-					String[] colName=new String[cols];
-					for(int i=0; i<cols; i++)
-						colName[i]=rsmd.getColumnName(i+1);
-					model.setColumnIdentifiers(colName);
-					String id,name,password,accountType;
-					while(rs.next()) {
-						id=rs.getString(1);
-						name=rs.getString(2);
-						password=rs.getString(3);
-						accountType=rs.getString(4);
-						String[] row= {id,name,password,accountType};
-						model.addRow(row);
-						
+					AdminController ai = new AdminController();
+					ResultSet result = ai.retrieveUserTable();
+					if(result != null) {
+						onSuccess(result);
 					}
-					stmt.close();
-					c.close();
+					else 
+					{
+					    JOptionPane.showMessageDialog(null, "No records found.", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
 				}
-				catch(Exception excep) {
-					excep.printStackTrace();
+				catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+				}	
 				}
 				
-			}
 		});
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -286,12 +269,16 @@ public class AdminHome extends JFrame {
 		try {
 			while(result != null && result.next()) {
 				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("accountType")});
+				userField.setText(result.getString("username"));
+				pwField.setText(result.getString("password"));
+				/*accRoleDDL.setSelectedItem(("accountType"));*/
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 		}
 		accTable.setModel(model);
 	}
+	
 	
 	private void onFailure() {
 		JOptionPane.showMessageDialog(null, "No record found", "No record found", JOptionPane.WARNING_MESSAGE);

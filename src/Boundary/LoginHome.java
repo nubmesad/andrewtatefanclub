@@ -28,7 +28,7 @@ public class LoginHome extends JFrame {
 	public String name;
 
 	/**
-	 * Launch the application...
+	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
