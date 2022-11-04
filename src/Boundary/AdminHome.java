@@ -37,8 +37,8 @@ public class AdminHome extends JFrame {
 	private JTextField pwField;
 	private JTextField searchUserField;
 	private JTable accTable;
-	private JTextField emailField;
 	public String name;
+	private JTextField userIDField;
 
 
 	public AdminHome(String username, String password) {
@@ -103,7 +103,7 @@ public class AdminHome extends JFrame {
 				try {
 					String username = userField.getText();
 					String password = pwField.getText();
-					String email = emailField.getText();
+					String email = userIDField.getText();
 					String accType = String.valueOf(accRoleDDL.getSelectedItem());
 
 					if(validateUI(username, password)) {
@@ -128,24 +128,60 @@ public class AdminHome extends JFrame {
 		
 		
 		JButton clearBtn = new JButton("Clear");
+		clearBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				userIDField.setText(null);
+				userField.setText(null);
+				pwField.setText(null);
+			}
+		});
 		clearBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		clearBtn.setBounds(279, 195, 94, 46);
 		panel.add(clearBtn);
 		
 		JButton updateBtn = new JButton("Update");
+		updateBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+						AdminController ac = new AdminController();
+						String userID = userIDField.getText();
+						String username = userField.getText();
+						String password = pwField.getText();
+						String accountType = String.valueOf(accRoleDDL.getSelectedItem());
+						
+						if(validateUpdateUI(userID)) {
+							if(ac.validateUpdate(userID,username,password,accountType)) {
+								onSuccess3();
+							}
+							else {
+								onFailure();
+							}
+						}
+						else {
+							onFailure();
+						}
+					}
+					
+				catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Update Failed", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		updateBtn.setBounds(160, 195, 94, 46);
 		panel.add(updateBtn);
 		
-		JLabel lblNewLabel_1_1_2 = new JLabel("Email : ");
+		JLabel lblNewLabel_1_1_2 = new JLabel("User ID:");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNewLabel_1_1_2.setBounds(10, 95, 123, 36);
 		panel.add(lblNewLabel_1_1_2);
 		
-		emailField = new JTextField();
-		emailField.setColumns(10);
-		emailField.setBounds(198, 101, 175, 31);
-		panel.add(emailField);
+		userIDField = new JTextField();
+		userIDField.setColumns(10);
+		userIDField.setBounds(198, 102, 175, 31);
+		panel.add(userIDField);
+		
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
@@ -175,7 +211,7 @@ public class AdminHome extends JFrame {
 						
 						if(result != null)  
 						{
-							onSuccess(result);
+							onSuccess2(result);
 						}
 						else
 						{
@@ -269,9 +305,6 @@ public class AdminHome extends JFrame {
 		try {
 			while(result != null && result.next()) {
 				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("accountType")});
-				userField.setText(result.getString("username"));
-				pwField.setText(result.getString("password"));
-				/*accRoleDDL.setSelectedItem(("accountType"));*/
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
@@ -279,11 +312,45 @@ public class AdminHome extends JFrame {
 		accTable.setModel(model);
 	}
 	
+	private void onSuccess2(ResultSet result) {
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		model.addColumn("userId");
+		model.addColumn("username");
+		model.addColumn("password");
+		model.addColumn("accountType");
+
+		try {
+			while(result != null && result.next()) {
+				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("accountType")});
+				userField.setText(result.getString("username"));
+				pwField.setText(result.getString("password"));
+				userIDField.setText(result.getString("userId"));
+				userIDField.setEditable(false);
+				/*accRoleDDL.setSelectedItem(("accountType"));*/
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+		}
+		accTable.setModel(model);
+	}
+
+	private void onSuccess3() {
+		JOptionPane.showMessageDialog(null, "Information updated successfully", "Information updated successfully", JOptionPane.WARNING_MESSAGE);
+	}
+	
 	
 	private void onFailure() {
 		JOptionPane.showMessageDialog(null, "No record found", "No record found", JOptionPane.WARNING_MESSAGE);
 	}
-	private boolean validateUI(String id, String password) {
-		return (id != null && id.length()>0 && password != null && password.length()>0);
+	private boolean validateUpdateUI(String userID) {
+		return (userID != null && userID.length()>0);
+	}
+	private boolean validateUI(String userID, String password) {
+		return (userID != null && userID.length()>0 && password != null && password.length()>0);
 	}
 }

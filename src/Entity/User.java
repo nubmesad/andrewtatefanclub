@@ -83,9 +83,9 @@ public class User {
 			return rs;
 	}
 
-	public boolean updateInfo(String username, String password, String accountType) {
-		String sqlStatement = "UPDATE users SET userID = ?, username = ?, password = ?, accountType=?";
-		String[] parameters = {username,password,accountType};
+	public boolean updateInfo(String userID, String username, String password, String accountType) {
+		String sqlStatement = "UPDATE users SET username = ?, password = ?, accountType=? WHERE userID=?";
+		String[] parameters = {username,password,accountType,userID};
 		int rows = createUpdateHelper(sqlStatement,parameters);
 		return rows>0;
 	}

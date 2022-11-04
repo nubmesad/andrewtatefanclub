@@ -33,9 +33,9 @@ public class AdminController {
 	public ResultSet retrieveUserTable() {
 			return user.view();
 	}
-	public boolean validateUpdate(String username,String password,String accountType) {
-		if(username.matches("^[a-zA-Z0-9]*$") && password.matches("^[a-zA-Z0-9]*$")) {
-			return user.updateInfo(username, password, accountType);
+	public boolean validateUpdate(String userID, String username,String password,String accountType) {
+		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
+			return user.updateInfo(userID,username, password, accountType);
 		}
 		else {
 			throw new IllegalArgumentException("Invalid input format");
