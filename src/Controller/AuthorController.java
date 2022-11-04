@@ -1,43 +1,35 @@
 package Controller;
 import java.sql.ResultSet;
 
-import Entity.User;
+import Entity.Paper;
 
-public class AuthorController {
-	private User user = new User();
+public class AuthorController 
+{
+	private Paper paper = new Paper();
 	
-    public ResultSet validateRetrieve(String username) {
-		if(username.matches(".*")) {
+    public ResultSet validateRetrieve(String title) 
+    {
+		if(title.matches(".*")) {
 
-        return user.search(username);
+        return paper.search(title);
 		}
 		else {
-			throw new IllegalArgumentException("Name not found");
+			throw new IllegalArgumentException("Title not found");
 		}    
     }
     
-	public boolean validateRegister(String username, String password, String accountType) {
-		if(username.matches("^[a-zA-Z0-9]*$") && password.matches("^[a-zA-Z0-9]*$")) {
-			if(user.isUsernameExist(username)) {
-				throw new IllegalArgumentException("Username already Exist");
-			}
-			else {
-				return user.register(username,password,accountType);
-			}
-		}
-		else {
-			throw new IllegalArgumentException("Invalid input format");
-		}
+	public ResultSet retrieveUserTable() 
+	{
+			return paper.view();
 	}
-	
-	public ResultSet retrieveUserTable() {
-			return user.view();
-	}
-	public boolean validateUpdate(String userID, String username,String password,String accountType) {
-		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
-			return user.updateInfo(userID,username, password, accountType);
+	public boolean validateUpdate(String paperId, String title,String content) 
+	{
+		if(paperId.matches("^[a-zA-Z0-9]*$") && title.matches("^[a-zA-Z0-9]*$")) 
+		{
+			return paper.updatePaper(paperId, title, content);
 		}
-		else {
+		else 
+		{
 			throw new IllegalArgumentException("Invalid input format");
 		}
 	}

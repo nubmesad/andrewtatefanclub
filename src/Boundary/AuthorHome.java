@@ -21,6 +21,8 @@ import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Controller.AuthorController;
+
 public class AuthorHome extends JFrame {
 
 	private JPanel contentPane;

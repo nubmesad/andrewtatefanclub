@@ -13,16 +13,16 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
-public class papers {
+public class Paper {
 	private String paperId;
 	private String title;
 	private String content;
 	//Constructors
-	public papers()
+	public Paper()
 	{
 	}
 	
-	public papers(String paperId, String title, String content)
+	public Paper(String paperId, String title, String content)
 	{
 		this.paperId = paperId;
 		this.title = title;
@@ -30,17 +30,23 @@ public class papers {
 	}
 	public boolean create(String paperId, String title, String content)
 	{
-		String sqlStatement = "INSERT INTO papers (paperId, title, content) VALUES(?, ?, ?)";
+		String sqlStatement = "INSERT INTO Paper (paperId, title, content) VALUES(?, ?, ?)";
 		String[] parameters = {paperId, title, content};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
-	public boolean updatepapers (String paperId, String title, String content)
+	public boolean updatePaper (String paperId, String title, String content)
 	{
-		String sqlStatement = "UPDATE papers SET title=?, content=? WHERE paperId=?";
+		String sqlStatement = "UPDATE Paper SET title=?, content=? WHERE paperId=?";
 		String[] parameters = {title, content, paperId};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
+	}
+	public ResultSet search (String title) {
+		String sqlStatement = "SELECT * FROM papers WHERE title=?";
+		String[] parameters = {title};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
 	}
 	
 	//set up db connection
