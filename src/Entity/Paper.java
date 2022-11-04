@@ -13,7 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
-public class Paper {
+public class Paper 
+{
 	private String paperId;
 	private String title;
 	private String content;
@@ -42,11 +43,19 @@ public class Paper {
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
-	public ResultSet search (String title) {
+	public ResultSet search (String title) 
+	{
 		String sqlStatement = "SELECT * FROM papers WHERE title=?";
 		String[] parameters = {title};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
+	}
+	public ResultSet view() 
+	{
+		String sqlStatement = "SELECT * FROM papers";
+		String [] parameters = {};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
 	}
 	
 	//set up db connection
@@ -65,31 +74,41 @@ public class Paper {
 			return con;
 		}
 		
-		private ResultSet queryHelper(String sqlStatement, String[] parameters) {
+		private ResultSet queryHelper(String sqlStatement, String[] parameters) 
+		{
 			Connection connection = dbConnection();
 
-			try {
+			try 
+			{
 				PreparedStatement statement = connection.prepareStatement(sqlStatement);
-				for(int i = 0; i < parameters.length; i++) {
+				for(int i = 0; i < parameters.length; i++) 
+				{
 					statement.setString((i+1), parameters[i]);
 				}
 				return statement.executeQuery();
-			} catch (SQLException e) {
+			} 
+			catch (SQLException e) 
+			{
 				e.printStackTrace();
 				return null;
 			}
 		}
 		
-		private int createUpdateHelper(String sqlStatement, String[] parameters) {
+		private int createUpdateHelper(String sqlStatement, String[] parameters) 
+		{
 			Connection connection = dbConnection();
 
-			try {
+			try 
+			{
 				PreparedStatement statement = connection.prepareStatement(sqlStatement);
-				for(int i = 0; i < parameters.length; i++) {
+				for(int i = 0; i < parameters.length; i++) 
+				{
 					statement.setString((i+1), parameters[i]);
 				}
 				return statement.executeUpdate();
-			} catch (SQLException e) {
+			} 
+			catch (SQLException e) 
+			{
 				e.printStackTrace();
 				return 0;
 			}
