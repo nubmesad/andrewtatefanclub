@@ -152,7 +152,7 @@ public class AdminHome extends JFrame {
 						
 						if(validateUpdateUI(userID)) {
 							if(ac.validateUpdate(userID,username,password,accountType)) {
-								onSuccess3();
+								onSuccessUpdate();
 							}
 							else {
 								onFailure();
@@ -211,7 +211,7 @@ public class AdminHome extends JFrame {
 						
 						if(result != null)  
 						{
-							onSuccess2(result);
+							onSuccessSearch(result);
 						}
 						else
 						{
@@ -239,6 +239,9 @@ public class AdminHome extends JFrame {
 		contentPane.add(scrollPane);
 		accTable = new JTable();
 		scrollPane.setViewportView(accTable);
+		AdminController ai = new AdminController();
+		ResultSet result = ai.retrieveUserTable();
+		onSuccessView(result);
 		
 		
 		JButton Logout = new JButton("Logout");
@@ -267,7 +270,7 @@ public class AdminHome extends JFrame {
 					AdminController ai = new AdminController();
 					ResultSet result = ai.retrieveUserTable();
 					if(result != null) {
-						onSuccess(result);
+						onSuccessView(result);
 					}
 					else 
 					{
@@ -290,7 +293,7 @@ public class AdminHome extends JFrame {
 		return (username != null && username.length()>0);
 	}
 	
-	private void onSuccess(ResultSet result) {
+	private void onSuccessView(ResultSet result) {
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -312,7 +315,7 @@ public class AdminHome extends JFrame {
 		accTable.setModel(model);
 	}
 	
-	private void onSuccess2(ResultSet result) {
+	private void onSuccessSearch(ResultSet result) {
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -339,7 +342,7 @@ public class AdminHome extends JFrame {
 		accTable.setModel(model);
 	}
 
-	private void onSuccess3() {
+	private void onSuccessUpdate() {
 		JOptionPane.showMessageDialog(null, "Information updated successfully", "Information updated successfully", JOptionPane.WARNING_MESSAGE);
 	}
 	
