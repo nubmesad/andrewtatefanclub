@@ -16,14 +16,16 @@ public class User {
 	private String userID;
 	private String username;
 	private String password;
+	private String email;
 	private String accountType;
 
 	public User(){}
 	
-	public User(String userID, String username, String password, String accountType){
+	public User(String userID, String username, String password, String email, String accountType){
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
+		this.email = email;
 		this.accountType = accountType;
 	}
 	
@@ -45,9 +47,9 @@ public class User {
 		return "";
 	}
 	
-	public boolean register (String username, String password, String accountType) {
-			String sqlStatement = "INSERT INTO users (`username`, `password`, `accountType`) VALUES (?,?,?)";
-			String[] parameters = {username, password, accountType};
+	public boolean register (String username, String password, String email, String accountType) {
+			String sqlStatement = "INSERT INTO users (`username`, `password`, `email`, `accountType`) VALUES (?,?,?,?)";
+			String[] parameters = {username, password, email, accountType};
 			int rows = createUpdateHelper(sqlStatement, parameters);
 			return rows>0;
 	}
@@ -83,9 +85,9 @@ public class User {
 			return rs;
 	}
 
-	public boolean updateInfo(String userID, String username, String password, String accountType) {
-		String sqlStatement = "UPDATE users SET username = ?, password = ?, accountType=? WHERE userID=?";
-		String[] parameters = {username,password,accountType,userID};
+	public boolean updateInfo(String userID, String username, String password, String email, String accountType) {
+		String sqlStatement = "UPDATE users SET username = ?, password = ?, email = ?, accountType=? WHERE userID=?";
+		String[] parameters = {username,password,email,accountType,userID};
 		int rows = createUpdateHelper(sqlStatement,parameters);
 		return rows>0;
 	}

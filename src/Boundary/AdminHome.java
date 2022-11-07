@@ -37,8 +37,10 @@ public class AdminHome extends JFrame {
 	private JTextField pwField;
 	private JTextField searchUserField;
 	private JTable accTable;
+	private JComboBox accRoleDDL;
 	public String name;
-	private JTextField userIDField;
+	private JTextField emailField;
+	private JTextField idField;
 
 
 	public AdminHome(String username, String password) {
@@ -52,50 +54,50 @@ public class AdminHome extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Admin Homepage");
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 23));
-		lblNewLabel.setBounds(324, 29, 239, 48);
+		lblNewLabel.setBounds(309, 7, 239, 48);
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Account Registration", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(21, 98, 406, 266);
+		panel.setBounds(21, 66, 406, 298);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Username : ");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_1.setBounds(10, 22, 123, 36);
+		lblNewLabel_1.setBounds(10, 59, 123, 36);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Password : ");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_1_1.setBounds(10, 59, 123, 36);
+		lblNewLabel_1_1.setBounds(10, 106, 123, 36);
 		panel.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Account Role : ");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(10, 133, 175, 36);
+		lblNewLabel_1_1_1.setBounds(10, 182, 175, 36);
 		panel.add(lblNewLabel_1_1_1);
 		
 		userField = new JTextField();
-		userField.setBounds(198, 28, 175, 31);
+		userField.setBounds(198, 65, 175, 31);
 		panel.add(userField);
 		userField.setColumns(10);
 		
 		pwField = new JTextField();
 		pwField.setColumns(10);
-		pwField.setBounds(198, 65, 175, 31);
+		pwField.setBounds(198, 106, 175, 31);
 		panel.add(pwField);
 		
 		String[] accountType = {"Author","Reviewer","Conference Chair","Admin"};
-		JComboBox accRoleDDL = new JComboBox(accountType);
+		accRoleDDL = new JComboBox(accountType);
 		accRoleDDL.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		accRoleDDL.setSelectedIndex(3);
-		accRoleDDL.setBounds(198, 143, 175, 22);
+		accRoleDDL.setBounds(198, 190, 175, 22);
 		panel.add(accRoleDDL);
 		
 		JButton registerBtn = new JButton("Register");
 		registerBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		registerBtn.setBounds(39, 195, 94, 46);
+		registerBtn.setBounds(39, 229, 94, 46);
 		registerBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -103,13 +105,16 @@ public class AdminHome extends JFrame {
 				try {
 					String username = userField.getText();
 					String password = pwField.getText();
-					String email = userIDField.getText();
+					String email = emailField.getText();
 					String accType = String.valueOf(accRoleDDL.getSelectedItem());
 
 					if(validateUI(username, password)) {
 						AdminController admincontroller = new AdminController();
-						if(admincontroller.validateRegister(username, password, accType)) {
+						if(admincontroller.validateRegister(username, password, email, accType)) {
 							JOptionPane.showMessageDialog(null, "Account Registered!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
+							AdminController ai = new AdminController();
+							ResultSet result = ai.retrieveUserTable();
+							onSuccessView(result);
 						}
 						else {
 					    JOptionPane.showMessageDialog(null, "Missing Field", "ERROR", JOptionPane.ERROR_MESSAGE);					
@@ -130,13 +135,14 @@ public class AdminHome extends JFrame {
 		JButton clearBtn = new JButton("Clear");
 		clearBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userIDField.setText(null);
+				idField.setText(null);
+				emailField.setText(null);
 				userField.setText(null);
 				pwField.setText(null);
 			}
 		});
 		clearBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		clearBtn.setBounds(279, 195, 94, 46);
+		clearBtn.setBounds(279, 229, 94, 46);
 		panel.add(clearBtn);
 		
 		JButton updateBtn = new JButton("Update");
@@ -145,13 +151,14 @@ public class AdminHome extends JFrame {
 				try {
 
 						AdminController ac = new AdminController();
-						String userID = userIDField.getText();
+						String userid = idField.getText();
 						String username = userField.getText();
 						String password = pwField.getText();
+						String email = emailField.getText();
 						String accountType = String.valueOf(accRoleDDL.getSelectedItem());
 						
-						if(validateUpdateUI(userID)) {
-							if(ac.validateUpdate(userID,username,password,accountType)) {
+						if(validateUpdateUI(userid)) {
+							if(ac.validateUpdate(userid,username,password,email,accountType)) {
 								onSuccessUpdate();
 							}
 							else {
@@ -169,19 +176,30 @@ public class AdminHome extends JFrame {
 			}
 		});
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		updateBtn.setBounds(160, 195, 94, 46);
+		updateBtn.setBounds(161, 229, 94, 46);
 		panel.add(updateBtn);
 		
-		JLabel lblNewLabel_1_1_2 = new JLabel("User ID:");
+		JLabel lblNewLabel_1_1_2 = new JLabel("Email :");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_1_1_2.setBounds(10, 95, 123, 36);
+		lblNewLabel_1_1_2.setBounds(10, 147, 123, 36);
 		panel.add(lblNewLabel_1_1_2);
 		
-		userIDField = new JTextField();
-		userIDField.setColumns(10);
-		userIDField.setBounds(198, 102, 175, 31);
-		panel.add(userIDField);
+		emailField = new JTextField();
+		emailField.setColumns(10);
+		emailField.setBounds(198, 148, 175, 31);
+		panel.add(emailField);
 		
+		JLabel lblNewLabel_1_3 = new JLabel("User ID : ");
+		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_1_3.setBounds(10, 22, 123, 36);
+		panel.add(lblNewLabel_1_3);
+		
+		idField = new JTextField();
+		idField.setColumns(10);
+		idField.setBounds(198, 22, 175, 31);
+		panel.add(idField);
+		idField.setEditable(false);
+
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
@@ -235,7 +253,7 @@ public class AdminHome extends JFrame {
 
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(447, 115, 342, 347);
+		scrollPane.setBounds(447, 84, 342, 378);
 		contentPane.add(scrollPane);
 		accTable = new JTable();
 		scrollPane.setViewportView(accTable);
@@ -258,11 +276,11 @@ public class AdminHome extends JFrame {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Account List", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_2.setBounds(437, 98, 363, 372);
+		panel_2.setBounds(437, 66, 363, 404);
 		contentPane.add(panel_2);
 		
-		JButton ViewUsers = new JButton("View Users");
-		ViewUsers.setBounds(457, 472, 91, 23);
+		JButton ViewUsers = new JButton("Refresh");
+		ViewUsers.setBounds(617, 473, 91, 23);
 		contentPane.add(ViewUsers);
 		ViewUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -303,11 +321,12 @@ public class AdminHome extends JFrame {
 		model.addColumn("userId");
 		model.addColumn("username");
 		model.addColumn("password");
+		model.addColumn("email");
 		model.addColumn("accountType");
 
 		try {
 			while(result != null && result.next()) {
-				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("accountType")});
+				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("email"), result.getString("accountType")});
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
@@ -325,16 +344,19 @@ public class AdminHome extends JFrame {
 		model.addColumn("userId");
 		model.addColumn("username");
 		model.addColumn("password");
+		model.addColumn("email");
 		model.addColumn("accountType");
 
 		try {
 			while(result != null && result.next()) {
-				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("accountType")});
+				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("email"), result.getString("accountType")});
+				idField.setText(result.getString("userId"));
+				idField.setEditable(false);
 				userField.setText(result.getString("username"));
 				pwField.setText(result.getString("password"));
-				userIDField.setText(result.getString("userId"));
-				userIDField.setEditable(false);
-				/*accRoleDDL.setSelectedItem(("accountType"));*/
+				emailField.setText(result.getString("email"));
+				accRoleDDL.setSelectedItem(result.getString("accountType"));
+
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
@@ -344,6 +366,9 @@ public class AdminHome extends JFrame {
 
 	private void onSuccessUpdate() {
 		JOptionPane.showMessageDialog(null, "Information updated successfully", "Information updated successfully", JOptionPane.WARNING_MESSAGE);
+		AdminController ai = new AdminController();
+		ResultSet result = ai.retrieveUserTable();
+		onSuccessView(result);
 	}
 	
 	

@@ -16,13 +16,13 @@ public class AdminController {
 		}    
     }
     
-	public boolean validateRegister(String username, String password, String accountType) {
+	public boolean validateRegister(String username, String password, String email, String accountType) {
 		if(username.matches("^[a-zA-Z0-9]*$") && password.matches("^[a-zA-Z0-9]*$")) {
 			if(user.isUsernameExist(username)) {
 				throw new IllegalArgumentException("Username already Exist");
 			}
 			else {
-				return user.register(username,password,accountType);
+				return user.register(username,password,email,accountType);
 			}
 		}
 		else {
@@ -33,9 +33,9 @@ public class AdminController {
 	public ResultSet retrieveUserTable() {
 			return user.view();
 	}
-	public boolean validateUpdate(String userID, String username,String password,String accountType) {
+	public boolean validateUpdate(String userID, String username,String password,String email,String accountType) {
 		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
-			return user.updateInfo(userID,username, password, accountType);
+			return user.updateInfo(userID,username, password, email, accountType);
 		}
 		else {
 			throw new IllegalArgumentException("Invalid input format");
