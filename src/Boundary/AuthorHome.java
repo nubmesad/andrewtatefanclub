@@ -31,13 +31,17 @@ import java.awt.event.ActionEvent;
 
 import Controller.AdminController;
 import Controller.AuthorController;
+import javax.swing.JTextField;
 
 public class AuthorHome extends JFrame {
 
 	private JPanel contentPane;
 	private JTable accTable;
+	private JTextField textField;
 
 	public AuthorHome(String username, String password) {
+		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 822, 542);
 		contentPane = new JPanel();
@@ -119,7 +123,7 @@ public class AuthorHome extends JFrame {
 		JButton submitPaperBtn = new JButton("Submit Paper");
 		submitPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AuthorSubmitPaper asp = new AuthorSubmitPaper();
+				AuthorSubmitPaper asp = new AuthorSubmitPaper(username);
 				asp.setVisible(true);
 			}
 		});
@@ -136,6 +140,11 @@ public class AuthorHome extends JFrame {
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_1.setBounds(28, 86, 46, 14);
 		contentPane.add(lblNewLabel_1);
+		
+		textField = new JTextField();
+		textField.setBounds(35, 357, 106, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
 		
 		
 		CurrentReviewsBtn.addActionListener(new ActionListener() {
@@ -212,4 +221,7 @@ public class AuthorHome extends JFrame {
 		}
 		accTable.setModel(model);
 	}
+	
+		
+	
 }

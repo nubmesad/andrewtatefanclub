@@ -29,10 +29,10 @@ public class Paper
 		this.title = title;
 		this.content = content;
 	}
-	public boolean create(String paperId, String title, String content)
+	public boolean create(String title, String content)
 	{
-		String sqlStatement = "INSERT INTO Paper (paperId, title, content) VALUES(?, ?, ?)";
-		String[] parameters = {paperId, title, content};
+		String sqlStatement = "INSERT INTO papers (title, content) VALUES(?, ?)";
+		String[] parameters = {title, content};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}

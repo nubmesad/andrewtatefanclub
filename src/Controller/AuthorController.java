@@ -1,6 +1,8 @@
 package Controller;
 import java.sql.ResultSet;
 
+import javax.swing.JOptionPane;
+
 import Entity.Paper;
 
 public class AuthorController 
@@ -33,4 +35,25 @@ public class AuthorController
 			throw new IllegalArgumentException("Invalid input format");
 		}
 	}
+	
+	
+	
+	public boolean validateSubmitPaper(String title,String content) {
+
+		if(title.equals(""))
+		{
+			throw new IllegalArgumentException("Title cannot be empty.");
+		}
+		else if(content.equals(""))
+		{
+			throw new IllegalArgumentException("Content cannot be empty.");
+		}
+		else 
+		{
+    		return paper.create(title, content);
+		}  
+	}
+	
+	
+
 }

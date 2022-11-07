@@ -270,7 +270,6 @@ public class AdminHome extends JFrame {
 					dispose();
 					LoginHome lh = new LoginHome();
 					lh.setVisible(true);
-					
 				}
 			});
 		
