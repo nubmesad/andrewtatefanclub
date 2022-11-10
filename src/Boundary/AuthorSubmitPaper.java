@@ -29,7 +29,7 @@ public class AuthorSubmitPaper extends JFrame {
 	private JTextField titleField;
 	private JTextArea textAreaField;
 
-	public AuthorSubmitPaper(String username) {
+	public AuthorSubmitPaper(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 680, 334);
 		contentPane = new JPanel();
@@ -72,6 +72,9 @@ public class AuthorSubmitPaper extends JFrame {
 						if(ac.validateSubmitPaper(title, content))
 						{
 							JOptionPane.showMessageDialog(null, "Paper Submitted", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
+							dispose();
+							AuthorAddAuthors lh = new AuthorAddAuthors();
+							lh.setVisible(true);
 						}
 						else
 						{
@@ -92,6 +95,11 @@ public class AuthorSubmitPaper extends JFrame {
 		panel_3.add(nextButton);
 		
 		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnBack.setBounds(450, 246, 91, 22);
 		panel_3.add(btnBack);
 	}

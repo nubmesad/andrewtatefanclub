@@ -58,6 +58,13 @@ public class Paper
 		return rs;
 	}
 	
+	public ResultSet PapersTitleComboBox() {
+		String sqlStatement = "SELECT title FROM papers";
+		String [] parameters = {};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
+	
 	//set up db connection
 		private Connection dbConnection() {
 			

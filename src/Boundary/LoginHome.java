@@ -34,6 +34,7 @@ public class LoginHome extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					LoginHome frame = new LoginHome();
 					frame.setVisible(true);
 				} catch (Exception e) {

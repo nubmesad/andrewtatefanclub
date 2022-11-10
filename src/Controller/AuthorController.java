@@ -2,13 +2,16 @@ package Controller;
 import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
-
+import Entity.Authors;
 import Entity.Paper;
+import Entity.User;
+
 
 public class AuthorController 
 {
 	private Paper paper = new Paper();
-	
+	private Authors authors = new Authors();
+
     public ResultSet validateRetrieve(String title) 
     {
 		if(title.matches(".*")) {
@@ -19,6 +22,15 @@ public class AuthorController
 			throw new IllegalArgumentException("Title not found");
 		}    
     }
+    
+	public ResultSet retrieveAuthorName() {
+		return authors.authorNameComboBox();
+	}
+    
+	public ResultSet retrievePaperTitle() {
+		return paper.PapersTitleComboBox();
+	}
+    
     
 	public ResultSet retrieveUserTable() 
 	{

@@ -37,10 +37,10 @@ public class AuthorHome extends JFrame {
 
 	private JPanel contentPane;
 	private JTable accTable;
-	private JTextField textField;
+	private JTextField testField;
 
 	public AuthorHome(String username, String password) {
-		
+
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 822, 542);
@@ -56,6 +56,13 @@ public class AuthorHome extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JButton logoutBtn = new JButton("Logout");
+		logoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				LoginHome lh = new LoginHome();
+				lh.setVisible(true);
+			}
+		});
 		logoutBtn.setBounds(709, 473, 91, 23);
 		contentPane.add(logoutBtn);
 		
@@ -123,7 +130,7 @@ public class AuthorHome extends JFrame {
 		JButton submitPaperBtn = new JButton("Submit Paper");
 		submitPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AuthorSubmitPaper asp = new AuthorSubmitPaper(username);
+				AuthorSubmitPaper asp = new AuthorSubmitPaper(username, password);
 				asp.setVisible(true);
 			}
 		});
@@ -141,11 +148,10 @@ public class AuthorHome extends JFrame {
 		lblNewLabel_1.setBounds(28, 86, 46, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		textField = new JTextField();
-		textField.setBounds(35, 357, 106, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
+		testField = new JTextField();
+		testField.setBounds(35, 357, 106, 20);
+		contentPane.add(testField);
+		testField.setColumns(10);
 		
 		CurrentReviewsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

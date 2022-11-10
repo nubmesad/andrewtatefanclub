@@ -33,6 +33,7 @@ public class AdminController {
 	public ResultSet retrieveUserTable() {
 			return user.view();
 	}
+	
 	public boolean validateUpdate(String userID, String username,String password,String email,String accountType) {
 		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
 			return user.updateInfo(userID,username, password, email, accountType);
