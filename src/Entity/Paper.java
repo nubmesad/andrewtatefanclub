@@ -36,6 +36,14 @@ public class Paper
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
+	
+	public boolean createPA(String paperId, String submittedId,String authorId)
+	{
+		String sqlStatement = "INSERT INTO paper_authors (paperId, submittedId, authorId) VALUES(?,?,?)";
+		String[] parameters = {paperId, submittedId,authorId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	public boolean updatePaper (String paperId, String title, String content)
 	{
 		String sqlStatement = "UPDATE Paper SET title=?, content=? WHERE paperId=?";
@@ -43,10 +51,10 @@ public class Paper
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
-	public ResultSet search (String title) 
+	public ResultSet search (String paperId) 
 	{
-		String sqlStatement = "SELECT * FROM papers WHERE title=?";
-		String[] parameters = {title};
+		String sqlStatement = "SELECT title FROM papers WHERE paperId=?";
+		String[] parameters = {paperId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
@@ -58,8 +66,8 @@ public class Paper
 		return rs;
 	}
 	
-	public ResultSet PapersTitleComboBox() {
-		String sqlStatement = "SELECT title FROM papers";
+	public ResultSet getLastPaperID() {
+		String sqlStatement = "SELECT paperId from papers ORDER by paperId DESC LIMIT 1";
 		String [] parameters = {};
 		ResultSet rs = queryHelper(sqlStatement, parameters);
 		return rs;

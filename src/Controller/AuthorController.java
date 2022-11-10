@@ -12,14 +12,14 @@ public class AuthorController
 	private Paper paper = new Paper();
 	private Authors authors = new Authors();
 
-    public ResultSet validateRetrieve(String title) 
+    public ResultSet validateRetrieve(String paperId) 
     {
-		if(title.matches(".*")) {
+		if(paperId.matches(".*")) {
 
-        return paper.search(title);
+        return paper.search(paperId);
 		}
 		else {
-			throw new IllegalArgumentException("Title not found");
+			throw new IllegalArgumentException("Paper ID not found");
 		}    
     }
     
@@ -27,10 +27,9 @@ public class AuthorController
 		return authors.authorNameComboBox();
 	}
     
-	public ResultSet retrievePaperTitle() {
-		return paper.PapersTitleComboBox();
+	public ResultSet retrievePaperID() {
+		return paper.getLastPaperID();
 	}
-    
     
 	public ResultSet retrieveUserTable() 
 	{
@@ -66,6 +65,12 @@ public class AuthorController
 		}  
 	}
 	
+	public boolean validateSubmitPaperAuthor(String paperId, String submittedId,String authorId) { 
+		
+    		return paper.createPA(paperId, submittedId, authorId);
+	}  
+	
+	
     public ResultSet validateIDRetrieve(String username) {
 		if(username.matches(".*")) {
 
@@ -75,6 +80,16 @@ public class AuthorController
 			throw new IllegalArgumentException("Name not found");
 		}    
     }
+    
+    public ResultSet validateAuthorIDRetrieve(String name) {
+ 		if(name.matches(".*")) {
+
+         return authors.searchAuthorID(name);
+ 		}
+ 		else {
+ 			throw new IllegalArgumentException("Name not found");
+ 		}    
+     }
     
 	public boolean validateUpdate(String userID, String username,String password,String email) {
 		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {

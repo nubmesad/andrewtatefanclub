@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 
@@ -20,30 +22,20 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class AuthorAddAuthors extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField nameField;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AuthorAddAuthors frame = new AuthorAddAuthors();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	
 	
-	public AuthorAddAuthors() {
+	public AuthorAddAuthors(String username) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 267);
 		contentPane = new JPanel();
@@ -77,37 +69,46 @@ public class AuthorAddAuthors extends JFrame {
 		lbl2.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lbl2.setBounds(23, 142, 119, 14);
 		panel.add(lbl2);
+		AuthorController ai = new AuthorController();
+		ResultSet rs2 = ai.retrievePaperID();
 		
-		JButton addAuthorsBtn = new JButton("Add");
-		addAuthorsBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		try {
+			if(rs2.next()) {
+				String paperId = rs2.getString(1);
+				ResultSet rs3 = ai.validateRetrieve(paperId);
+				if(rs3.next()) {
+					String title = rs3.getString(1);
+					/*textField.setText(title);*/
+				}
+				/*ResultSet rs3 = ai.validateRetrieve(id);
+				titleLabel.setText(rs3.getString(1));*/
 			}
-		});
-		addAuthorsBtn.setBounds(459, 139, 59, 23);
-		panel.add(addAuthorsBtn);
 		
-		JLabel nameLbl = new JLabel("");
-		nameLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-		nameLbl.setBounds(152, 118, 286, 14);
-		panel.add(nameLbl);
+		}
+		catch (SQLException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		JComboBox authorNameCombo = new JComboBox();
 		authorNameCombo.setBounds(135, 32, 383, 22);
 		panel.add(authorNameCombo);
 		
-		AuthorController ai = new AuthorController();
 		ResultSet rs = ai.retrieveAuthorName();
 		try 
 		{
 			while(rs.next()) 
 			{
-			    String result = rs.getString(1); // Retrieves the value of the designated column in the current row of this ResultSet object as a String
-			    String result2 = rs.getString(2); 
+			    String result = rs.getString(1);
+			    String id = rs.getString(2);
+			   // Retrieves the value of the designated column in the current row of this ResultSet object as a String
+			     
 			    if (result != null) 
 			    {
 			        result = result.trim();
 			    }
-			    authorNameCombo.addItem(result + " " + result2);
+			    authorNameCombo.addItem(result);
 			}
 		} 
 		catch (SQLException e1) 
@@ -120,9 +121,55 @@ public class AuthorAddAuthors extends JFrame {
 			public void actionPerformed(ActionEvent e)
 			{
 				String s = (String)authorNameCombo.getSelectedItem();
-				nameLbl.setText(s);			
+				nameField.setText(s);			
 			}
 		});
+		
+
+		
+		JButton addAuthorsBtn = new JButton("Add");
+		addAuthorsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ResultSet resultId = ai.validateIDRetrieve(username);
+					ResultSet resultAuthorId = ai.validateAuthorIDRetrieve(nameField.getText());
+					ResultSet rs2 = ai.retrievePaperID();
+					if(resultId.next() && resultAuthorId.next() && rs2.next()) {
+					String submittedId = resultId.getString("userId");
+					String authorID = resultAuthorId.getString("userId");
+					String paperId = rs2.getString(1);
+					
+					if(validatePAUI(paperId,submittedId,authorID)) {
+						System.out.printf(paperId + " " + submittedId + " " + authorID);
+						/*if(validateSubmitPaperAuthor(paperId,submittedId,authorID)){
+							JOptionPane.showMessageDialog(null,"Authors Added", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							JOptionPane.showMessageDialog(null,"Missing Field", "FAILED", JOptionPane.WARNING_MESSAGE);
+						}*/
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"Missing Field", "FAILED", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+					}
+				
+				catch (SQLException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+				
+			}
+
+			private boolean validateSubmitPaperAuthor(String paperId, String submittedId, String authorID) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		addAuthorsBtn.setBounds(459, 139, 59, 23);
+		panel.add(addAuthorsBtn);
+
 		
 		
 		JLabel paperLbl = new JLabel("");
@@ -130,33 +177,17 @@ public class AuthorAddAuthors extends JFrame {
 		paperLbl.setBounds(152, 143, 297, 14);
 		panel.add(paperLbl);
 		
-		JComboBox papersCombo = new JComboBox();
-		papersCombo.setBounds(135, 65, 383, 22);
-		panel.add(papersCombo);
-		ResultSet rs2 = ai.retrievePaperTitle();
-		try {
-			while(rs2.next()) {
-			    String result = rs2.getString(1); // Retrieves the value of the designated column in the current row of this ResultSet object as a String
-			    if (result != null) 
-			    {
-			        result = result.trim();
-			    }
-			    papersCombo.addItem(result);
-			}
-		} 
-		catch (SQLException e1) 
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
-		papersCombo.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{
-				String s = (String)papersCombo.getSelectedItem();
-				paperLbl.setText(s);
-			}
-		});
+		nameField = new JTextField();
+		nameField.setEditable(false);
+		nameField.setBounds(152, 116, 102, 19);
+		panel.add(nameField);
+		nameField.setColumns(10);
 		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBounds(135, 67, 383, 19);
+		panel.add(textField);
+		textField.setColumns(10);
 
 		
 		
@@ -168,5 +199,8 @@ public class AuthorAddAuthors extends JFrame {
 		});
 		btnNewButton_1.setBounds(487, 198, 75, 23);
 		contentPane.add(btnNewButton_1);
+	}
+	private boolean validatePAUI(String paperId, String submittedId, String authorId) {
+		return (paperId != null && paperId.length()>0 && submittedId != null && submittedId.length()>0 && authorId != null && authorId.length()>0);
 	}
 }

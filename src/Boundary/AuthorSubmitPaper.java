@@ -73,7 +73,7 @@ public class AuthorSubmitPaper extends JFrame {
 						{
 							JOptionPane.showMessageDialog(null, "Paper Submitted", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
 							dispose();
-							AuthorAddAuthors lh = new AuthorAddAuthors();
+							AuthorAddAuthors lh = new AuthorAddAuthors(username);
 							lh.setVisible(true);
 						}
 						else

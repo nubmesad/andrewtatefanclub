@@ -24,7 +24,7 @@ public class Authors {
 	
 	
 	public ResultSet authorNameComboBox() {
-		String sqlStatement = "SELECT `fname` , `lname` FROM authors";
+		String sqlStatement = "SELECT `name`, `userId` FROM users WHERE `accountType` = 'Author'";
 		String [] parameters = {};
 		ResultSet rs = queryHelper(sqlStatement, parameters);
 		return rs;
@@ -34,6 +34,19 @@ public class Authors {
 	public ResultSet searchID (String username) {
 		String sqlStatement = "SELECT * FROM users WHERE username=?";
 		String[] parameters = {username};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public ResultSet searchAuthorID (String name) {
+		String sqlStatement = "SELECT userId FROM users WHERE name=?";
+		String[] parameters = {name};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	public ResultSet searchTitle (String title) {
+		String sqlStatement = "SELECT * FROM papers WHERE title=?";
+		String[] parameters = {title};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
