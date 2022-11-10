@@ -21,7 +21,8 @@ import javax.swing.JOptionPane;
 import Controller.UserLoginController;
 
 public class LoginHome extends JFrame {
-
+	public static String currentID;
+	public static String currentUser;
 	private JPanel contentPane;
 	private JTextField userTextField;
 	private JTextField passwordTextField;

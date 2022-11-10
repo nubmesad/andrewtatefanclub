@@ -47,9 +47,9 @@ public class User {
 		return "";
 	}
 	
-	public boolean register (String username, String password, String email, String accountType) {
-			String sqlStatement = "INSERT INTO users (`username`, `password`, `email`, `accountType`) VALUES (?,?,?,?)";
-			String[] parameters = {username, password, email, accountType};
+	public boolean register (String userId, String username, String password, String name,String email, String accountType) {
+			String sqlStatement = "INSERT INTO users (`userId`,`username`, `password`, `email`, `name`, `accountType`) VALUES (?,?,?,?,?,?)";
+			String[] parameters = {userId, username, password, name, email, accountType};
 			int rows = createUpdateHelper(sqlStatement, parameters);
 			return rows>0;
 	}
@@ -85,9 +85,9 @@ public class User {
 			return rs;
 	}
 
-	public boolean updateInfo(String userID, String username, String password, String email, String accountType) {
-		String sqlStatement = "UPDATE users SET username = ?, password = ?, email = ?, accountType=? WHERE userID=?";
-		String[] parameters = {username,password,email,accountType,userID};
+	public boolean updateInfo(String userID, String username, String password, String name, String email, String accountType) {
+		String sqlStatement = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, accountType=? WHERE userID=?";
+		String[] parameters = {username,password,name,email,accountType,userID};
 		int rows = createUpdateHelper(sqlStatement,parameters);
 		return rows>0;
 	}

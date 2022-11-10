@@ -16,13 +16,13 @@ public class AdminController {
 		}    
     }
     
-	public boolean validateRegister(String username, String password, String email, String accountType) {
+	public boolean validateRegister(String userId, String username, String password, String email, String name, String accountType) {
 		if(username.matches("^[a-zA-Z0-9]*$") && password.matches("^[a-zA-Z0-9]*$")) {
 			if(user.isUsernameExist(username)) {
 				throw new IllegalArgumentException("Username already Exist");
 			}
 			else {
-				return user.register(username,password,email,accountType);
+				return user.register(userId,username,password,name,email,accountType);
 			}
 		}
 		else {
@@ -34,9 +34,9 @@ public class AdminController {
 			return user.view();
 	}
 	
-	public boolean validateUpdate(String userID, String username,String password,String email,String accountType) {
+	public boolean validateUpdate(String userID, String username,String password,String name, String email,String accountType) {
 		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
-			return user.updateInfo(userID,username, password, email, accountType);
+			return user.updateInfo(userID,username, password, name, email, accountType);
 		}
 		else {
 			throw new IllegalArgumentException("Invalid input format");

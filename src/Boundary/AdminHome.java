@@ -41,6 +41,7 @@ public class AdminHome extends JFrame {
 	public String name;
 	private JTextField emailField;
 	private JTextField idField;
+	private JTextField nameField;
 
 
 	public AdminHome(String username, String password) {
@@ -106,11 +107,13 @@ public class AdminHome extends JFrame {
 					String username = userField.getText();
 					String password = pwField.getText();
 					String email = emailField.getText();
+					String name = nameField.getText();
+					String id = idField.getText();
 					String accType = String.valueOf(accRoleDDL.getSelectedItem());
 
 					if(validateUI(username, password)) {
 						AdminController admincontroller = new AdminController();
-						if(admincontroller.validateRegister(username, password, email, accType)) {
+						if(admincontroller.validateRegister(id, username, password, email, name, accType)) {
 							JOptionPane.showMessageDialog(null, "Account Registered!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
 							AdminController ai = new AdminController();
 							ResultSet result = ai.retrieveUserTable();
@@ -139,6 +142,7 @@ public class AdminHome extends JFrame {
 				emailField.setText(null);
 				userField.setText(null);
 				pwField.setText(null);
+				nameField.setText(null);
 			}
 		});
 		clearBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -155,10 +159,11 @@ public class AdminHome extends JFrame {
 						String username = userField.getText();
 						String password = pwField.getText();
 						String email = emailField.getText();
+						String name = nameField.getText();
 						String accountType = String.valueOf(accRoleDDL.getSelectedItem());
 						
 						if(validateUpdateUI(userid)) {
-							if(ac.validateUpdate(userid,username,password,email,accountType)) {
+							if(ac.validateUpdate(userid,username,password,name,email,accountType)) {
 								onSuccessUpdate();
 							}
 							else {
@@ -189,16 +194,15 @@ public class AdminHome extends JFrame {
 		emailField.setBounds(198, 148, 175, 31);
 		panel.add(emailField);
 		
-		JLabel lblNewLabel_1_3 = new JLabel("User ID : ");
-		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_1_3.setBounds(10, 22, 123, 36);
-		panel.add(lblNewLabel_1_3);
+		nameField = new JTextField();
+		nameField.setColumns(10);
+		nameField.setBounds(198, 24, 175, 31);
+		panel.add(nameField);
 		
-		idField = new JTextField();
-		idField.setColumns(10);
-		idField.setBounds(198, 22, 175, 31);
-		panel.add(idField);
-		idField.setEditable(false);
+		JLabel lblNewLabel_1_4 = new JLabel("Name :");
+		lblNewLabel_1_4.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_1_4.setBounds(10, 24, 123, 36);
+		panel.add(lblNewLabel_1_4);
 
 		
 		JPanel panel_1 = new JPanel();
@@ -281,6 +285,16 @@ public class AdminHome extends JFrame {
 		JButton ViewUsers = new JButton("Refresh");
 		ViewUsers.setBounds(617, 473, 91, 23);
 		contentPane.add(ViewUsers);
+		
+		idField = new JTextField();
+		idField.setBounds(106, 20, 81, 31);
+		contentPane.add(idField);
+		idField.setColumns(10);
+		
+		JLabel lblNewLabel_1_3 = new JLabel("User ID : ");
+		lblNewLabel_1_3.setBounds(25, 14, 123, 36);
+		contentPane.add(lblNewLabel_1_3);
+		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.BOLD, 17));
 		ViewUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -320,12 +334,13 @@ public class AdminHome extends JFrame {
 		model.addColumn("userId");
 		model.addColumn("username");
 		model.addColumn("password");
+		model.addColumn("name");
 		model.addColumn("email");
 		model.addColumn("accountType");
 
 		try {
 			while(result != null && result.next()) {
-				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("email"), result.getString("accountType")});
+				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"),result.getString("name"), result.getString("email"), result.getString("accountType")});
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
@@ -343,16 +358,17 @@ public class AdminHome extends JFrame {
 		model.addColumn("userId");
 		model.addColumn("username");
 		model.addColumn("password");
+		model.addColumn("name");
 		model.addColumn("email");
 		model.addColumn("accountType");
 
 		try {
 			while(result != null && result.next()) {
-				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("email"), result.getString("accountType")});
+				model.addRow(new Object[] {result.getString("userId"), result.getString("username"), result.getString("password"), result.getString("name"),result.getString("email"), result.getString("accountType")});
 				idField.setText(result.getString("userId"));
-				idField.setEditable(false);
 				userField.setText(result.getString("username"));
 				pwField.setText(result.getString("password"));
+				nameField.setText(result.getString("name"));
 				emailField.setText(result.getString("email"));
 				accRoleDDL.setSelectedItem(result.getString("accountType"));
 

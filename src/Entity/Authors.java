@@ -30,6 +30,20 @@ public class Authors {
 		return rs;
 	}
 	
+	
+	public ResultSet searchID (String username) {
+		String sqlStatement = "SELECT * FROM users WHERE username=?";
+		String[] parameters = {username};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public boolean updateAuthor(String userID, String username, String password, String email) {
+		String sqlStatement = "UPDATE users SET username = ?, password = ?, email = ? WHERE userID=?";
+		String[] parameters = {username,password,email,userID};
+		int rows = createUpdateHelper(sqlStatement,parameters);
+		return rows>0;
+	}
 
 	
 	private Connection dbConnection() {

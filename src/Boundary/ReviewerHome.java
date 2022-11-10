@@ -99,7 +99,7 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2_1_1 = new JButton("Edit Account");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateAccount ua = new updateAccount();
+				updateAccount ua = new updateAccount(username);
 				ua.setVisible(true);
 			}
 		});

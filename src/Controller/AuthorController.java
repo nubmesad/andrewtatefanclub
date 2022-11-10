@@ -66,6 +66,23 @@ public class AuthorController
 		}  
 	}
 	
-	
+    public ResultSet validateIDRetrieve(String username) {
+		if(username.matches(".*")) {
+
+        return authors.searchID(username);
+		}
+		else {
+			throw new IllegalArgumentException("Name not found");
+		}    
+    }
+    
+	public boolean validateUpdate(String userID, String username,String password,String email) {
+		if(userID.matches("^[a-zA-Z0-9]*$") && username.matches("^[a-zA-Z0-9]*$")) {
+			return authors.updateAuthor(userID,username, password, email);
+		}
+		else {
+			throw new IllegalArgumentException("Invalid input format");
+		}
+	}
 
 }

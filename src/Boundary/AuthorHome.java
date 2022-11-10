@@ -119,7 +119,7 @@ public class AuthorHome extends JFrame {
 		JButton updateBtn = new JButton("Update Account");
 		updateBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateAccount ua = new updateAccount();
+				updateAccount ua = new updateAccount(username);
 				ua.setVisible(true);
 			}
 		});
