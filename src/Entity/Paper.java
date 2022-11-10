@@ -67,7 +67,7 @@ public class Paper
 	}
 	
 	public ResultSet getLastPaperID() {
-		String sqlStatement = "SELECT paperId from papers ORDER by paperId DESC LIMIT 1";
+		String sqlStatement = "SELECT paperId , title from papers ORDER by paperId DESC LIMIT 1";
 		String [] parameters = {};
 		ResultSet rs = queryHelper(sqlStatement, parameters);
 		return rs;
