@@ -13,6 +13,8 @@ import java.awt.Font;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ReviewerViewAllocatedPapers extends JFrame {
 
@@ -58,6 +60,11 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 		panel.add(table);
 		
 		JButton btnNewButton_1 = new JButton("Back");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnNewButton_1.setBounds(271, 449, 91, 23);
 		panel.add(btnNewButton_1);
 		

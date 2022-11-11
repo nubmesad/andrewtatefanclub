@@ -3,11 +3,102 @@
  */
 package Entity;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author User
  *
  */
 public class ConferenceChair {
-	/*SELECT U.*, P.* FROM users U JOIN paper_authors B ON U.userId = B.authorId JOIN papers P ON P.paperId = B.paperId;*/
 
+	private String conferenceId;
+	private String bids;
+
+	//Constructors
+	public ConferenceChair()
+	{
+	}
+	public ConferenceChair(String conferenceId, String bids)
+	{
+		this.conferenceId = conferenceId;
+		this.bids = bids;
+	}
+	
+	public ResultSet currentBid () {
+		String sqlStatement = "SELECT P.title,U.name FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.bidInfo = 'Yes'";
+		String[] parameters = {};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public ResultSet searchID (String username) {
+		String sqlStatement = "SELECT * FROM users WHERE username=?";
+		String[] parameters = {username};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	public ResultSet searchWorkload (String reviewId) {
+		String sqlStatement = "SELECT workload FROM reviewers WHERE reviewId=?";
+		String[] parameters = {reviewId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	private Connection dbConnection() {
+		
+	    Connection con = null;
+	    String url = "jdbc:mysql://localhost:3306/AndrewTateFanClub";
+	    String username = "root";
+	    String password = "";
+	    
+		try {
+			con = DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();	
+		}
+		return con;
+	}
+	
+	private ResultSet queryHelper(String sqlStatement, String[] parameters) 
+	{
+		Connection connection = dbConnection();
+
+		try 
+		{
+			PreparedStatement statement = connection.prepareStatement(sqlStatement);
+			for(int i = 0; i < parameters.length; i++) 
+			{
+				statement.setString((i+1), parameters[i]);
+			}
+			return statement.executeQuery();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private int createUpdateHelper(String sqlStatement, String[] parameters) 
+	{
+		Connection connection = dbConnection();
+
+		try 
+		{
+			PreparedStatement statement = connection.prepareStatement(sqlStatement);
+			for(int i = 0; i < parameters.length; i++) 
+			{
+				statement.setString((i+1), parameters[i]);
+			}
+			return statement.executeUpdate();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }
