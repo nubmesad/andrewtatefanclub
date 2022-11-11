@@ -18,6 +18,30 @@ public class ReviewerController {
 		}    
     }
     
+    public ResultSet validatePaperIDRetrieve(String title) {
+
+        return review.searchpaperID(title);
+  
+    }
+    
+    
+    public ResultSet viewAllCurrentBids(String reviewerId) {
+
+        return review.currentBid(reviewerId);
+  
+    }
+    
+    public ResultSet retrievePapers() {
+    	
+        return review.viewPapers();
+	}
+ 
+	public boolean validateSubmitBid(String paperId, String reviewerId, String bidInfo) { 
+
+    		return review.submitBid(paperId, reviewerId, bidInfo);
+	}  
+  
+    
 	public boolean validateReviewWorkload(String userId,String workload) {
     		return review.workload(userId, workload);
 	}
