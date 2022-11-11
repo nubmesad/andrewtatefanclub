@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2022 at 04:37 PM
+-- Generation Time: Nov 11, 2022 at 05:49 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -63,14 +63,8 @@ CREATE TABLE `bids` (
 
 INSERT INTO `bids` (`paperId`, `reviewerId`, `bidInfo`) VALUES
 (200, 30000, 'No'),
-(201, 30001, 'Yes'),
-(202, 30001, 'Yes'),
-(203, 30001, 'Yes'),
-(204, 30001, 'Yes'),
-(206, 30001, 'Yes'),
-(220, 30001, 'Yes'),
-(221, 30001, 'Yes'),
-(229, 30001, 'Yes');
+(200, 30001, 'No'),
+(200, 30002, 'Yes');
 
 -- --------------------------------------------------------
 
@@ -187,6 +181,7 @@ INSERT INTO `users` (`userId`, `username`, `password`, `name`, `email`, `account
 (20003, 'd', 'd', 'd', 'd', 'Author'),
 (30000, 'Jerone', 'Tan', 'George', 'c@mail.com', 'Reviewer'),
 (30001, '4', '4', 'Monkey', '4', 'Reviewer'),
+(30002, 'f', 'f', 'ff', 'f', 'Reviewer'),
 (40000, 'Bobby', 'Lee', 'Bob', 'd@mail.com', 'Conference Chair'),
 (40001, 'qwer', 'qwer1', 'Peter', 'qwer', 'Conference Chair');
 
@@ -204,8 +199,9 @@ ALTER TABLE `authors`
 -- Indexes for table `bids`
 --
 ALTER TABLE `bids`
-  ADD PRIMARY KEY (`paperId`),
-  ADD KEY `bids_FK2` (`reviewerId`);
+  ADD UNIQUE KEY `FK1` (`paperId`,`reviewerId`) USING BTREE,
+  ADD KEY `FK4` (`paperId`),
+  ADD KEY `FK5` (`reviewerId`);
 
 --
 -- Indexes for table `papers`
@@ -258,13 +254,6 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `bids`
---
-ALTER TABLE `bids`
-  ADD CONSTRAINT `bids_FK1` FOREIGN KEY (`paperId`) REFERENCES `papers` (`paperId`),
-  ADD CONSTRAINT `bids_FK2` FOREIGN KEY (`reviewerId`) REFERENCES `users` (`userId`);
 
 --
 -- Constraints for table `paper_authors`
