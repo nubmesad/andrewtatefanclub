@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2022 at 04:32 PM
+-- Generation Time: Nov 11, 2022 at 04:37 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -44,6 +44,33 @@ INSERT INTO `authors` (`authorId`, `fName`, `lName`) VALUES
 (303, 'Sam', 'Lee'),
 (304, 'Alex', 'Ho'),
 (305, 'Zac', 'Stark');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bids`
+--
+
+CREATE TABLE `bids` (
+  `paperId` int(10) NOT NULL,
+  `reviewerId` int(10) NOT NULL,
+  `bidInfo` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bids`
+--
+
+INSERT INTO `bids` (`paperId`, `reviewerId`, `bidInfo`) VALUES
+(200, 30000, 'No'),
+(201, 30001, 'Yes'),
+(202, 30001, 'Yes'),
+(203, 30001, 'Yes'),
+(204, 30001, 'Yes'),
+(206, 30001, 'Yes'),
+(220, 30001, 'Yes'),
+(221, 30001, 'Yes'),
+(229, 30001, 'Yes');
 
 -- --------------------------------------------------------
 
@@ -93,6 +120,48 @@ INSERT INTO `papers` (`paperId`, `title`, `content`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `paper_authors`
+--
+
+CREATE TABLE `paper_authors` (
+  `paperId` int(100) NOT NULL,
+  `submittedId` int(100) NOT NULL,
+  `authorId` int(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paper_authors`
+--
+
+INSERT INTO `paper_authors` (`paperId`, `submittedId`, `authorId`) VALUES
+(200, 20001, 20001),
+(200, 20001, 20002),
+(200, 20001, 20003),
+(201, 20003, 20003),
+(241, 20001, 20002);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reviewers`
+--
+
+CREATE TABLE `reviewers` (
+  `reviewId` int(100) NOT NULL,
+  `workload` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reviewers`
+--
+
+INSERT INTO `reviewers` (`reviewId`, `workload`) VALUES
+(30000, '6'),
+(30001, '2');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -132,10 +201,31 @@ ALTER TABLE `authors`
   ADD PRIMARY KEY (`authorId`);
 
 --
+-- Indexes for table `bids`
+--
+ALTER TABLE `bids`
+  ADD PRIMARY KEY (`paperId`),
+  ADD KEY `bids_FK2` (`reviewerId`);
+
+--
 -- Indexes for table `papers`
 --
 ALTER TABLE `papers`
   ADD PRIMARY KEY (`paperId`);
+
+--
+-- Indexes for table `paper_authors`
+--
+ALTER TABLE `paper_authors`
+  ADD UNIQUE KEY `FK1` (`paperId`,`submittedId`,`authorId`) USING BTREE,
+  ADD KEY `FK2` (`authorId`),
+  ADD KEY `FK3` (`submittedId`);
+
+--
+-- Indexes for table `reviewers`
+--
+ALTER TABLE `reviewers`
+  ADD PRIMARY KEY (`reviewId`);
 
 --
 -- Indexes for table `users`
@@ -164,6 +254,31 @@ ALTER TABLE `papers`
 --
 ALTER TABLE `users`
   MODIFY `userId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40004;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bids`
+--
+ALTER TABLE `bids`
+  ADD CONSTRAINT `bids_FK1` FOREIGN KEY (`paperId`) REFERENCES `papers` (`paperId`),
+  ADD CONSTRAINT `bids_FK2` FOREIGN KEY (`reviewerId`) REFERENCES `users` (`userId`);
+
+--
+-- Constraints for table `paper_authors`
+--
+ALTER TABLE `paper_authors`
+  ADD CONSTRAINT `FK1` FOREIGN KEY (`paperId`) REFERENCES `papers` (`paperId`),
+  ADD CONSTRAINT `FK2` FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`),
+  ADD CONSTRAINT `FK3` FOREIGN KEY (`submittedId`) REFERENCES `users` (`userId`);
+
+--
+-- Constraints for table `reviewers`
+--
+ALTER TABLE `reviewers`
+  ADD CONSTRAINT `FK_reviewers` FOREIGN KEY (`reviewId`) REFERENCES `users` (`userId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
