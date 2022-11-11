@@ -9,16 +9,24 @@ import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
+
+import Controller.AuthorController;
+import Controller.ReviewerController;
+
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class ReviewerHome extends JFrame {
 
 	private JPanel contentPane;
+	private JLabel workloadLabel;
 
 
 	public ReviewerHome(String username, String password) {
@@ -41,6 +49,11 @@ public class ReviewerHome extends JFrame {
 		panel.setBounds(364, 67, 456, 371);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		
+		String[] workNo = {"1","2","3","4","5","6","7","8","9","10"};
+        JComboBox workLoadCombo = new JComboBox(workNo);
+        workLoadCombo.setBounds(166, 39, 47, 22);
+        contentPane.add(workLoadCombo);
 		
 		JList list = new JList();
 		list.setBounds(10, 25, 436, 335);
@@ -116,17 +129,42 @@ public class ReviewerHome extends JFrame {
 		btnNewButton_2_1_1_1.setBounds(595, 449, 111, 23);
 		contentPane.add(btnNewButton_2_1_1_1);
 		
+		JLabel workloadLabel = new JLabel("");
+		workloadLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		workloadLabel.setBounds(305, 44, 206, 17);
+		contentPane.add(workloadLabel);
+		
 		JLabel lblNewLabel = new JLabel("Max no. of workload:");
 		lblNewLabel.setBounds(29, 42, 146, 14);
 		contentPane.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(165, 39, 47, 22);
-		contentPane.add(comboBox);
+
 		
 		JButton btnNewButton_3 = new JButton("Set");
-		btnNewButton_3.setBounds(223, 39, 49, 23);
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ReviewerController rc = new ReviewerController();
+					ResultSet result = rc.validateIDRetrieve(username);
+					String workload = String.valueOf(workLoadCombo.getSelectedItem());
+					while(result != null && result.next()) {
+						String reviewId = result.getString("userId");
+						if(rc.validateReviewWorkload(reviewId, workload)) {
+							JOptionPane.showMessageDialog(null, "Workload Set", "Information updated successfully", JOptionPane.INFORMATION_MESSAGE);
+							workloadLabel.setText("Current Workload: " + workload);
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Error setting workload", "ERROR", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				}
+				
+				catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		btnNewButton_3.setBounds(223, 39, 69, 23);
 		contentPane.add(btnNewButton_3);
 		
 		JButton btnNewButton_2_1_1_1_1 = new JButton("View Bids");
@@ -140,9 +178,11 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2_1_1_1_2 = new JButton("Logout");
 		btnNewButton_2_1_1_1_2.setBounds(709, 449, 111, 23);
 		contentPane.add(btnNewButton_2_1_1_1_2);
+	
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(100, 100, 839, 542);
 		this.setVisible(true);
 	}
+	
 }
