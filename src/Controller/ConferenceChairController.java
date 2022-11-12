@@ -14,6 +14,13 @@ public class ConferenceChairController {
         return conference.currentBid();
   
     }
+    
+    public ResultSet validateBidsDDL(String reviewId) {
+
+        return conference.AllocateBidsDDL(reviewId);
+  
+    }
+    
     public ResultSet validateIDRetrieve(String username) {
 		if(username.matches(".*")) {
 

@@ -156,10 +156,18 @@ public class ConferenceChairHome extends JFrame {
 						{
 							String reviewId = getId.getString("userId");
 					        ResultSet getWorkload = cc.validateWorkload(reviewId);
+					        ResultSet getAllocatedBids = cc.validateBidsDDL(reviewId);
 							if(getWorkload.next())
 							{
 								workloadLbl.setText(getWorkload.getString(1));
+								
 							}
+							while(getAllocatedBids.next() && getAllocatedBids != null) {
+								String ab = getAllocatedBids.getString(1);
+								ab = ab.trim();
+								ReviewerComboBox.addItem(ab);
+							}
+							
 						}
 					} 
 			        catch (SQLException e1) {

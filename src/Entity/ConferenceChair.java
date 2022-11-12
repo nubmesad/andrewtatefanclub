@@ -35,6 +35,13 @@ public class ConferenceChair {
 		return result;
 	}
 	
+	public ResultSet AllocateBidsDDL (String reviewId) {
+		String sqlStatement = "SELECT P.title FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.reviewerId = ? AND B.bidInfo = 'Yes'";
+		String[] parameters = {reviewId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
 	public ResultSet searchID (String username) {
 		String sqlStatement = "SELECT * FROM users WHERE username=?";
 		String[] parameters = {username};
