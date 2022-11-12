@@ -33,7 +33,7 @@ public class ConferenceChairHome extends JFrame {
 	private JTable table;
 	private JLabel testLbl;
 	private JLabel workloadLbl;
-	private String user123;
+	private String user;
 	
 	public ConferenceChairHome(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -149,19 +149,18 @@ public class ConferenceChairHome extends JFrame {
 		        
 		        if (row >= 0 && col >= 1) 
 		        {	
-		        	user123 = (String) accTable.getModel().getValueAt(row, col);
-			        ResultSet rt = cc.validateReviewerIDRetrieve(user123);
+		        	user = (String) accTable.getModel().getValueAt(row, col);
+			        ResultSet getId = cc.validateReviewerIDRetrieve(user);
 			        try {
-						if(rt.next())
+						if(getId.next())
 						{
-							String reviewId =rt.getString("userId");
-					        ResultSet lol = cc.validateWorkload(reviewId);
-							if(lol.next())
+							String reviewId = getId.getString("userId");
+					        ResultSet getWorkload = cc.validateWorkload(reviewId);
+							if(getWorkload.next())
 							{
-								workloadLbl.setText(lol.getString(1));
+								workloadLbl.setText(getWorkload.getString(1));
 							}
 						}
-
 					} 
 			        catch (SQLException e1) {
 						// TODO Auto-generated catch block
