@@ -23,6 +23,8 @@ import javax.swing.JTable;
 import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ConferenceChairHome extends JFrame {
 
@@ -31,7 +33,7 @@ public class ConferenceChairHome extends JFrame {
 	private JTable table;
 	private JLabel testLbl;
 	private JLabel workloadLbl;
-
+	private String user123;
 	
 	public ConferenceChairHome(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,6 +114,13 @@ public class ConferenceChairHome extends JFrame {
 		contentPane.add(btnViewReviewedPapers);
 		
 		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				LoginHome lh = new LoginHome();
+				lh.setVisible(true);
+			}
+		});
 		btnLogout.setBounds(709, 473, 91, 23);
 		contentPane.add(btnLogout);
 		
@@ -129,6 +138,41 @@ public class ConferenceChairHome extends JFrame {
 		workloadLbl.setBounds(177, 81, 45, 13);
 		contentPane.add(workloadLbl);
 
+		
+		
+		accTable.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = accTable.rowAtPoint(evt.getPoint());
+		        int col = accTable.columnAtPoint(evt.getPoint());
+		        
+		        
+		        if (row >= 0 && col >= 1) 
+		        {	
+		        	user123 = (String) accTable.getModel().getValueAt(row, col);
+			        ResultSet rt = cc.validateReviewerIDRetrieve(user123);
+			        try {
+						if(rt.next())
+						{
+							String reviewId =rt.getString("userId");
+					        ResultSet lol = cc.validateWorkload(reviewId);
+							if(lol.next())
+							{
+								workloadLbl.setText(lol.getString(1));
+							}
+						}
+
+					} 
+			        catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+		        }
+
+		    }
+		});
+		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(100, 100, 822, 542);

@@ -23,6 +23,16 @@ public class ConferenceChairController {
 			throw new IllegalArgumentException("Name not found");
 		}    
     }
+    
+    public ResultSet validateReviewerIDRetrieve(String name) {
+		if(name.matches(".*")) {
+
+        return conference.searchReviewerID(name);
+		}
+		else {
+			throw new IllegalArgumentException("Name not found");
+		}    
+    }
     public ResultSet validateWorkload(String reviewId) {
 
         return conference.searchWorkload(reviewId);  

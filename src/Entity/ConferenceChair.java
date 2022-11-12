@@ -41,6 +41,14 @@ public class ConferenceChair {
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
+	
+	public ResultSet searchReviewerID (String name) {
+		String sqlStatement = "SELECT * FROM users WHERE name=?";
+		String[] parameters = {name};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
 	public ResultSet searchWorkload (String reviewId) {
 		String sqlStatement = "SELECT workload FROM reviewers WHERE reviewId=?";
 		String[] parameters = {reviewId};
