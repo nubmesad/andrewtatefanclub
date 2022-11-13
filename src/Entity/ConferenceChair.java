@@ -92,7 +92,14 @@ public class ConferenceChair {
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
-
+	
+	public boolean manualAllocationUpdateBidsStatusToFailed (String paperId) {
+		String sqlStatement = "UPDATE bids SET bidStatus = 'Failed' WHERE `paperId` = ? AND `bidStatus` = 'Pending'";
+		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
 	private Connection dbConnection() {
 		
 	    Connection con = null;

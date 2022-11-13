@@ -45,6 +45,12 @@ public class ConferenceChairController {
         
     }
     
+    public Boolean insertAllocationUpdateBidStatusFailed(String paperId) {
+
+        return conference.manualAllocationUpdateBidsStatusToFailed(paperId);
+        
+    }
+    
     public ResultSet validateIDRetrieve(String username) {
 		if(username.matches(".*")) {
 
