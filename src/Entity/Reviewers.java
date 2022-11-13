@@ -39,7 +39,7 @@ public class Reviewers {
 	
 	public boolean submitBid(String paperId, String reviewerId, String bidInfo )
 	{
-		String sqlStatement = "INSERT INTO bids (paperId, reviewerId, bidInfo) values (?,?,?) ON DUPLICATE KEY UPDATE bidInfo = (?)";
+		String sqlStatement = "INSERT INTO bids (paperId, reviewerId, bidInfo, bidStatus) values (?,?,?,'Pending') ON DUPLICATE KEY UPDATE bidInfo = (?)";
 		String[] parameters = {paperId, reviewerId, bidInfo, bidInfo};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;

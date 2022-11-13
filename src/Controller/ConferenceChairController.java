@@ -18,7 +18,31 @@ public class ConferenceChairController {
     public ResultSet validateBidsDDL(String reviewId) {
 
         return conference.AllocateBidsDDL(reviewId);
-  
+        
+    }
+    
+    public ResultSet getAllocatedPapersCount(String reviewId) {
+
+        return conference.searchAllocatedPapersCount(reviewId);
+        
+    }
+    
+    public ResultSet getPaperId(String title) {
+
+        return conference.searchPaperID(title);
+        
+    }
+    
+    public Boolean insertAllocation(String paperId, String reviewerId) {
+
+        return conference.manualAllocation(paperId,reviewerId);
+        
+    }
+    
+    public Boolean insertAllocationUpdateBidStatus(String paperId, String reviewerId) {
+
+        return conference.manualAllocationUpdateBidsStatus(paperId,reviewerId);
+        
     }
     
     public ResultSet validateIDRetrieve(String username) {

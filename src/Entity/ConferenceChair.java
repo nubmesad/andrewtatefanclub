@@ -22,6 +22,7 @@ public class ConferenceChair {
 	public ConferenceChair()
 	{
 	}
+	
 	public ConferenceChair(String conferenceId, String bids)
 	{
 		this.conferenceId = conferenceId;
@@ -29,14 +30,21 @@ public class ConferenceChair {
 	}
 	
 	public ResultSet currentBid () {
-		String sqlStatement = "SELECT P.title,U.name FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.bidInfo = 'Yes'";
+		String sqlStatement = "SELECT P.title,U.name FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.bidInfo = 'Yes' AND B.bidStatus = 'Pending'";
 		String[] parameters = {};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
 	
 	public ResultSet AllocateBidsDDL (String reviewId) {
-		String sqlStatement = "SELECT P.title FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.reviewerId = ? AND B.bidInfo = 'Yes'";
+		String sqlStatement = "SELECT P.title FROM bids B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.reviewerId = U.userId WHERE B.reviewerId = ? AND B.bidInfo = 'Yes' AND B.bidStatus = 'Pending'";
+		String[] parameters = {reviewId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public ResultSet searchAllocatedPapersCount (String reviewId) {
+		String sqlStatement = "SELECT COUNT(`reviewerId`) FROM allocated_papers WHERE `reviewerId` = ?;";
 		String[] parameters = {reviewId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
@@ -45,6 +53,13 @@ public class ConferenceChair {
 	public ResultSet searchID (String username) {
 		String sqlStatement = "SELECT * FROM users WHERE username=?";
 		String[] parameters = {username};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public ResultSet searchPaperID (String title) {
+		String sqlStatement = "SELECT paperId FROM papers WHERE title=?";
+		String[] parameters = {title};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
@@ -62,6 +77,22 @@ public class ConferenceChair {
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
+	
+	public boolean manualAllocation (String paperId, String reviewerId) {
+		String sqlStatement = "INSERT INTO allocated_papers (`paperId`,`reviewerId`) VALUES (?,?) ";
+		String[] parameters = {paperId, reviewerId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	public boolean manualAllocationUpdateBidsStatus (String paperId, String reviewerId) {
+		String sqlStatement = "UPDATE bids SET bidStatus = 'Success' WHERE `paperId` = ? AND `reviewerId` = ?"
+				+ "";
+		String[] parameters = {paperId, reviewerId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+
 	private Connection dbConnection() {
 		
 	    Connection con = null;

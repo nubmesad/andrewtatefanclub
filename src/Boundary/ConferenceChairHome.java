@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import Controller.AdminController;
 import Controller.ConferenceChairController;
 import Controller.ReviewerController;
 
@@ -34,7 +35,11 @@ public class ConferenceChairHome extends JFrame {
 	private JLabel testLbl;
 	private JLabel workloadLbl;
 	private String user;
+	private String reviewerId;
 	private JComboBox ReviewerComboBox;
+	private ResultSet getId;
+	private ResultSet mainTable;
+
 	
 	public ConferenceChairHome(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,9 +67,9 @@ public class ConferenceChairHome extends JFrame {
 		contentPane.add(testLbl);
 		
 		ConferenceChairController cc = new ConferenceChairController();
-		ResultSet result = cc.viewAllCurrentBids();
+		mainTable = cc.viewAllCurrentBids();
 		ResultSet result2 = cc.validateIDRetrieve(username);
-		onSuccessViewBids(result);
+		onSuccessViewBids(mainTable);
 		try {
 			while(result2.next())
 			{
@@ -89,14 +94,8 @@ public class ConferenceChairHome extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JButton btnAllocatePapers = new JButton("Allocate Papers");
-		btnAllocatePapers.setBounds(208, 247, 183, 36);
-		panel.add(btnAllocatePapers);
-		
-		
-		JButton btnAutoAllocate = new JButton("Auto Allocate");
-		btnAutoAllocate.setBounds(10, 247, 188, 36);
-		panel.add(btnAutoAllocate);
+
+
 		JComboBox ReviewerComboBox = new JComboBox();
 		ReviewerComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -170,7 +169,7 @@ public class ConferenceChairHome extends JFrame {
 		        if (row >= 0 && col >= 1) 
 		        {	
 		        	user = (String) accTable.getModel().getValueAt(row, col);
-			        ResultSet getId = cc.validateReviewerIDRetrieve(user);
+			        getId = cc.validateReviewerIDRetrieve(user);
 			        try {
 						if(getId.next())
 						{
@@ -183,14 +182,14 @@ public class ConferenceChairHome extends JFrame {
 								workloadLbl.setText(getWorkload.getString(1));
 								
 							}
-							while(getAllocatedBids.next() && getAllocatedBids != null) {
-								String ab = getAllocatedBids.getString(1);
-								ab = ab.trim();
-								ReviewerComboBox.addItem(ab);
+							while(getAllocatedBids.next() && getAllocatedBids != null) 
+							{
+								String title = getAllocatedBids.getString(1);
+								ReviewerComboBox.addItem(title);
 							}
-							
 						}
 					} 
+			        
 			        catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -200,6 +199,75 @@ public class ConferenceChairHome extends JFrame {
 
 		    }
 		});
+		
+		JButton btnAllocatePapers = new JButton("Allocate Paper");
+		btnAllocatePapers.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				String selected_text = (String) ReviewerComboBox.getItemAt(ReviewerComboBox.getSelectedIndex());
+				ResultSet pId = cc.getPaperId(selected_text);
+				ReviewerComboBox.removeAllItems();
+				try 
+				{
+					String reviewId = getId.getString("userId");
+			        ResultSet getPaperCount = cc.getAllocatedPapersCount(reviewId);
+			        ResultSet getWorkload = cc.validateWorkload(reviewId);
+			        
+						if(pId.next() && getPaperCount.next() && getWorkload.next())
+						{
+					        ResultSet getAllocatedBids = cc.validateBidsDDL(reviewId);
+							String paperId = pId.getString("paperId");
+					        int workload = Integer.parseInt(getWorkload.getString(1)); 
+					        int paperCount = Integer.parseInt(getPaperCount.getString(1));
+					        System.out.println(paperCount + " " + workload);
+					        if(!(paperCount >= workload))
+					        {
+								if(cc.insertAllocation(paperId, reviewId) && cc.insertAllocationUpdateBidStatus(paperId, reviewId)  && getAllocatedBids.next()) 
+								{	
+									JOptionPane.showMessageDialog(null, "Inserted Successfully!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);
+									mainTable = cc.viewAllCurrentBids();
+									onSuccessViewBids(mainTable);
+									
+									while(getAllocatedBids.next() && getAllocatedBids != null) 
+									{
+										String title = getAllocatedBids.getString(1);
+										ReviewerComboBox.addItem(title);
+									}
+								}
+
+					        }
+							else 
+							{
+								JOptionPane.showMessageDialog(null, "Insertion Failed, Max workload of reviewer reached.", "ERROR", JOptionPane.ERROR_MESSAGE);					
+		                    }
+						}
+					} 
+					catch (SQLException e1) 
+					{
+						e1.printStackTrace();
+					}
+				
+
+					
+				}
+		});
+		btnAllocatePapers.setBounds(208, 247, 183, 36);
+		panel.add(btnAllocatePapers);
+		
+		
+		
+		
+		JButton btnAutoAllocate = new JButton("Auto Allocate");
+		btnAutoAllocate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+		});
+		btnAutoAllocate.setBounds(10, 247, 188, 36);
+		panel.add(btnAutoAllocate);
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -224,7 +292,5 @@ public class ConferenceChairHome extends JFrame {
 		}
 		accTable.setModel(model);
 	}
-	private void onSuccessSelectedBids() {
 
-	}
 }
