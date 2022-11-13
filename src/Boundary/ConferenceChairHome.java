@@ -34,6 +34,7 @@ public class ConferenceChairHome extends JFrame {
 	private JLabel testLbl;
 	private JLabel workloadLbl;
 	private String user;
+	private JComboBox ReviewerComboBox;
 	
 	public ConferenceChairHome(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,14 +97,33 @@ public class ConferenceChairHome extends JFrame {
 		JButton btnAutoAllocate = new JButton("Auto Allocate");
 		btnAutoAllocate.setBounds(10, 247, 188, 36);
 		panel.add(btnAutoAllocate);
-		
 		JComboBox ReviewerComboBox = new JComboBox();
+		ReviewerComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(ReviewerComboBox != null) {
+					DefaultTableModel model = new DefaultTableModel() {
+						@Override
+						public boolean isCellEditable(int row, int column) {
+							return false;
+						}
+					};
+					model.addColumn("Title");
+					String title = (String)ReviewerComboBox.getSelectedItem();
+					model.addRow(new Object[] {title});
+					table.setModel(model);
+				}
+			}
+		});
+
 		ReviewerComboBox.setBounds(10, 25, 381, 22);
 		panel.add(ReviewerComboBox);
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 58, 381, 178);
+		panel.add(scrollPane_1);
+		
 		table = new JTable();
-		table.setBounds(10, 58, 381, 178);
-		panel.add(table);
+		scrollPane_1.setViewportView(table);
 		
 		JButton btnViewAllBids = new JButton("View All Bids");
 		btnViewAllBids.setBounds(49, 426, 170, 36);
@@ -154,6 +174,7 @@ public class ConferenceChairHome extends JFrame {
 			        try {
 						if(getId.next())
 						{
+							ReviewerComboBox.removeAllItems();
 							String reviewId = getId.getString("userId");
 					        ResultSet getWorkload = cc.validateWorkload(reviewId);
 					        ResultSet getAllocatedBids = cc.validateBidsDDL(reviewId);
@@ -202,5 +223,8 @@ public class ConferenceChairHome extends JFrame {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 		}
 		accTable.setModel(model);
+	}
+	private void onSuccessSelectedBids() {
+
 	}
 }
