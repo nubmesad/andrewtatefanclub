@@ -172,7 +172,7 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2_1 = new JButton("View Allocated Papers");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReviewerViewAllocatedPapers rap = new ReviewerViewAllocatedPapers();
+				ReviewerViewAllocatedPapers rap = new ReviewerViewAllocatedPapers(username);
 				rap.setVisible(true);
 			}
 		});

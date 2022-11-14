@@ -44,6 +44,20 @@ public class Reviewers {
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
+	public boolean submitReview(String paperId, String rating, String reviews )
+	{
+		String sqlStatement = "INSERT INTO reviews (paperId, rating, review) values (?,?,?)";
+		String[] parameters = {paperId, rating, reviews};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	public boolean updateAllocatedReviewed (String paperId) {
+		String sqlStatement = "UPDATE allocated_papers SET reviewStatus = 'Reviewed' WHERE `paperId` = ?";
+		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	
 	public ResultSet searchID (String username) {
 		String sqlStatement = "SELECT * FROM users WHERE username=?";
@@ -59,6 +73,26 @@ public class Reviewers {
 		return result;
 	}
 	
+	
+	public ResultSet AllocatedBids (String reviewerId) {
+		String sqlStatement = "SELECT P.title, P.content FROM allocated_papers B JOIN papers P ON B.paperId = P.paperId WHERE B.reviewerId = ? AND B.reviewStatus = 'Not Reviewed'";
+		String[] parameters = {reviewerId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public ResultSet viewContent (String title) {
+		String sqlStatement = "SELECT content from papers WHERE title = ?";
+		String[] parameters = {title};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	public ResultSet viewAuthor (String title) {
+		String sqlStatement = "SELECT U.name FROM paper_authors B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.authorId = U.userId WHERE P.title = ?";
+		String[] parameters = {title};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
 	
 	
 	public ResultSet searchpaperID (String title) {

@@ -35,11 +35,38 @@ public class ReviewerController {
     	
         return review.viewPapers();
 	}
+    
+    public ResultSet retrieveContent(String title) {
+    	
+        return review.viewContent(title);
+	}
+    
+    public ResultSet retrieveAuthor(String title) {
+    	
+        return review.viewAuthor(title);
+	}
+    
+    public ResultSet retrieveAllocatedBids(String reviewerId) {
+    	
+        return review.AllocatedBids(reviewerId);
+	}
  
 	public boolean validateSubmitBid(String paperId, String reviewerId, String bidInfo) { 
 
     		return review.submitBid(paperId, reviewerId, bidInfo);
 	}  
+	
+	public boolean validateSubmitReview(String paperId, String rating, String reviews ) { 
+
+			return review.submitReview(paperId, rating, reviews);
+
+	}
+	public boolean validateUpdateStatus(String paperId) { 
+
+		return review.updateAllocatedReviewed(paperId);
+
+}
+
   
     
 	public boolean validateReviewWorkload(String userId,String workload) {

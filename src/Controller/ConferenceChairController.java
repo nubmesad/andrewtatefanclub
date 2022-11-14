@@ -27,6 +27,12 @@ public class ConferenceChairController {
         
     }
     
+    public ResultSet getPaperIdList(String reviewerId) {
+
+        return conference.autoAllocationSearchPaperId(reviewerId);
+        
+    }
+    
     public ResultSet getPaperId(String title) {
 
         return conference.searchPaperID(title);

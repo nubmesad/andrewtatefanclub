@@ -79,7 +79,7 @@ public class ConferenceChair {
 	}
 	
 	public boolean manualAllocation (String paperId, String reviewerId) {
-		String sqlStatement = "INSERT INTO allocated_papers (`paperId`,`reviewerId`) VALUES (?,?) ";
+		String sqlStatement = "INSERT INTO allocated_papers (`paperId`,`reviewerId`,`reviewStatus`) VALUES (?,?,'Not Reviewed') ";
 		String[] parameters = {paperId, reviewerId};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
@@ -98,6 +98,13 @@ public class ConferenceChair {
 		String[] parameters = {paperId};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
+	}
+	
+	public ResultSet autoAllocationSearchPaperId (String reviewerId) {
+		String sqlStatement = "SELECT `paperId` FROM `bids` WHERE reviewerId = ? AND bidStatus = 'Pending'";
+		String[] parameters = {reviewerId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
 	}
 	
 	private Connection dbConnection() {

@@ -3,6 +3,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -246,11 +248,63 @@ public class ConferenceChairHome extends JFrame {
 		btnAutoAllocate.setBounds(268, 243, 123, 23);
 		panel_1.add(btnAutoAllocate);
 		btnAutoAllocate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				
-				
-				
+			public void actionPerformed(ActionEvent e) 
+			{
+		        getId = cc.validateReviewerIDRetrieve(user);
+		        List<String> list=new ArrayList<String>();  
+				try 
+				{
+					if(getId.next())
+					{
+						String reviewId = getId.getString("userId");
+			        	ResultSet paperIdList = cc.getPaperIdList(reviewId);
+
+
+				        	while(paperIdList.next())
+				        	{
+					        	String test = paperIdList.getString(1);
+					        	list.add(test);
+				        	}				        	
+				        	for (int i=0; i<list.size(); i++)
+				        	{
+						        ResultSet getPaperCount = cc.getAllocatedPapersCount(reviewId);
+						        ResultSet getWorkload = cc.validateWorkload(reviewId);
+						        if(getPaperCount.next() && getWorkload.next())
+								{
+							        int workload = Integer.parseInt(getWorkload.getString(1)); 
+							        int paperCount = Integer.parseInt(getPaperCount.getString(1));
+					        		if(!(paperCount >= workload))
+					        		{
+						        		String paperId = list.get(i);
+						        		if(cc.insertAllocation(paperId, reviewId) && cc.insertAllocationUpdateBidStatus(paperId, reviewId))
+						        		{
+											cc.insertAllocationUpdateBidStatusFailed(paperId);
+											JOptionPane.showMessageDialog(null, "Automatically Inserted Paper: " + list.get(i) + "!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);
+						        		}
+					        		}
+					        		else
+					        		{
+										JOptionPane.showMessageDialog(null, "Insertion Failed for paper: " + list.get(i) + ", Max workload of reviewer reached.", "ERROR", JOptionPane.ERROR_MESSAGE);					
+					        		}
+								}
+						    }
+							ReviewerComboBox.removeAllItems();
+							mainTable = cc.viewAllCurrentBids();
+							onSuccessViewBids(mainTable);
+					        ResultSet getAllocatedBids = cc.validateBidsDDL(reviewId);
+					        ResultSet getAllocatedBids2 = cc.validateBidsDDL(reviewId);
+							onSuccessViewSelectedUserBids(getAllocatedBids2);
+
+							while(getAllocatedBids != null && getAllocatedBids.next()) 
+							{
+								ReviewerComboBox.addItem(getAllocatedBids.getString(1));
+							}
+					}	
+				} 
+				catch (SQLException e1) 
+				{
+					e1.printStackTrace();
+				}
 
 			}
 		});
