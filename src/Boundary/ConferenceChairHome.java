@@ -113,7 +113,14 @@ public class ConferenceChairHome extends JFrame {
 		contentPane.add(btnViewAllBids);
 		
 		JButton btnViewReviewedPapers = new JButton("View Reviewed Papers");
-		btnViewReviewedPapers.setBounds(26, 469, 102, 30);
+		btnViewReviewedPapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConferenceChairViewReviewedPapers ua = new ConferenceChairViewReviewedPapers(username);
+				ua.setVisible(true);
+			}
+		});
+		
+		btnViewReviewedPapers.setBounds(26, 471, 143, 25);
 		contentPane.add(btnViewReviewedPapers);
 		
 		JButton btnLogout = new JButton("Logout");

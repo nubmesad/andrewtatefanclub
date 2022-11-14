@@ -29,6 +29,13 @@ public class Reviewers {
 		this.workload = workload;
 	}
 	
+	public boolean deleteReview(String paperId)
+	{
+		String sqlStatement = "DELETE from reviews WHERE paperId = ?";
+		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	public boolean workload(String reviewerId, String workload )
 	{
 		String sqlStatement = "INSERT INTO reviewers (reviewId, workload) values (?,?) ON DUPLICATE KEY UPDATE workload = (?)";
@@ -44,10 +51,10 @@ public class Reviewers {
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
-	public boolean submitReview(String paperId, String rating, String reviews )
+	public boolean submitReview(String paperId, String rating, String reviews, String reviewerId )
 	{
-		String sqlStatement = "INSERT INTO reviews (paperId, rating, review) values (?,?,?)";
-		String[] parameters = {paperId, rating, reviews};
+		String sqlStatement = "INSERT INTO reviews (paperId, rating, review, reviewerId) values (?,?,?,?)";
+		String[] parameters = {paperId, rating, reviews,reviewerId};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
@@ -55,6 +62,20 @@ public class Reviewers {
 	public boolean updateAllocatedReviewed (String paperId) {
 		String sqlStatement = "UPDATE allocated_papers SET reviewStatus = 'Reviewed' WHERE `paperId` = ?";
 		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	public boolean updateAllocatedNotReviewed (String paperId) {
+		String sqlStatement = "UPDATE allocated_papers SET reviewStatus = 'Not Reviewed' WHERE `paperId` = ?";
+		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	public boolean updateReview (String rating, String review, String paperId) {
+		String sqlStatement = "UPDATE reviews SET `rating` = ?, `review` = ? WHERE `paperId` = ?";
+		String[] parameters = {rating,review,paperId};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
@@ -80,6 +101,12 @@ public class Reviewers {
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
+	public ResultSet viewReviewedPaper (String reviewerId) {
+		String sqlStatement = "SELECT P.title FROM reviews B JOIN papers P ON B.paperId = P.paperId WHERE B.reviewerId = ?";
+		String[] parameters = {reviewerId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
 	
 	public ResultSet viewContent (String title) {
 		String sqlStatement = "SELECT content from papers WHERE title = ?";
@@ -90,6 +117,12 @@ public class Reviewers {
 	public ResultSet viewAuthor (String title) {
 		String sqlStatement = "SELECT U.name FROM paper_authors B JOIN papers P ON B.paperId = P.paperId JOIN users U ON B.authorId = U.userId WHERE P.title = ?";
 		String[] parameters = {title};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	public ResultSet viewReview (String paperId) {
+		String sqlStatement = "SELECT review, rating from reviews WHERE paperId = ?";
+		String[] parameters = {paperId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}

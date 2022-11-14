@@ -80,4 +80,11 @@ public class ConferenceChairController {
 
         return conference.searchWorkload(reviewId);  
     }
+    
+    
+    public ResultSet viewAllReviewedPapers() {
+
+        return conference.getReviewedPapers();
+  
+    }
 }

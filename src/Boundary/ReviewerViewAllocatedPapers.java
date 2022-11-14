@@ -39,11 +39,12 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 	private String titleLabel;
 	private String contentArea;
 	private String rating;
+	private String reviewerId;
 
 	/**
 	 * Create the frame.
 	 */
-	public ReviewerViewAllocatedPapers(String username) {
+	public ReviewerViewAllocatedPapers(String username,String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 833, 540);
 		contentPane = new JPanel();
@@ -158,6 +159,19 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 		textArea.setBounds(10, 21, 399, 148);
 		panel_3.add(textArea);
 		
+		try {
+			ResultSet rId = rc.validateIDRetrieve(username);
+			if(rId.next()) {
+				reviewerId = rId.getString("userId");
+				ResultSet result = rc.retrieveAllocatedBids(reviewerId);
+				onSuccessViewBids(result);
+			}
+		}
+		catch (SQLException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
 		JButton btnNewButton = new JButton("Submit review");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -185,10 +199,11 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 				try {
 					ReviewerController rc = new ReviewerController();
 					ResultSet getpId = rc.validatePaperIDRetrieve(titleLabel.getText());
+					ResultSet rId = rc.validateIDRetrieve(username);
 					
-					if(getpId.next()) {
+					if(getpId.next() && rId.next()) {
 						ResultSet result = rc.retrieveAllocatedBids(getpId.getString(1));
-						if(rc.validateSubmitReview(getpId.getString(1),rating,textArea.getText()) && rc.validateUpdateStatus(getpId.getString(1))) {
+						if(rc.validateSubmitReview(getpId.getString(1),rating,textArea.getText(),rId.getString("userId")) && rc.validateUpdateStatus(getpId.getString(1))) {
 							JOptionPane.showMessageDialog(null, "Inserted", "Review added successfully", JOptionPane.INFORMATION_MESSAGE);
 							onSuccessViewBids(result);
 							contentArea.setText(null);
@@ -213,25 +228,26 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 		panel_3.add(btnNewButton);
 		
 		JButton btnEditReview = new JButton("Edit review");
+		btnEditReview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReviewerEditReview rer = new ReviewerEditReview(username,password);
+				rer.setVisible(true);
+			}
+		});
 		btnEditReview.setBounds(151, 171, 124, 23);
 		panel_3.add(btnEditReview);
 		
 		JButton btnDeleteReview = new JButton("Delete review");
+		btnDeleteReview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReviewerDeleteReview rdr = new ReviewerDeleteReview(username,password);
+				rdr.setVisible(true);
+			}
+		});
 		btnDeleteReview.setBounds(10, 171, 124, 23);
 		panel_3.add(btnDeleteReview);
 		
-		ResultSet rId = rc.validateIDRetrieve(username);
-		try {
-			if(rId.next()) {
-				String reviewerId = rId.getString("userId");
-				ResultSet result = rc.retrieveAllocatedBids(reviewerId);
-				onSuccessViewBids(result);
-			}
-		}
-		catch (SQLException e1) 
-		{
-			e1.printStackTrace();
-		}
+
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -239,7 +255,7 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 				int row = table.rowAtPoint(evt.getPoint());
 				int col = table.columnAtPoint(evt.getPoint());
 				
-				if(row >= 0 && col >= 0) {
+				if(row >= 0 && col == 0) {
 					paperTitle = (String) table.getModel().getValueAt(row, col);
 					titleLabel.setText(paperTitle);
 					

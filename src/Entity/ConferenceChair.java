@@ -107,6 +107,13 @@ public class ConferenceChair {
 		return result;
 	}
 	
+	public ResultSet getReviewedPapers() {
+		String sqlStatement = "SELECT P.title FROM allocated_papers B JOIN papers P ON B.paperId = P.paperId WHERE B.reviewStatus = 'Reviewed'";
+		String[] parameters = {};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
 	private Connection dbConnection() {
 		
 	    Connection con = null;

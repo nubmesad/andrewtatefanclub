@@ -159,7 +159,12 @@ public class ReviewerHome extends JFrame {
 	
 		
 		JButton btnNewButton_2 = new JButton("Delete Bids");
-		btnNewButton_2.setBounds(10, 263, 91, 23);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNewButton_2.setBounds(10, 263, 119, 23);
 		panel_2.add(btnNewButton_2);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -172,7 +177,7 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2_1 = new JButton("View Allocated Papers");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReviewerViewAllocatedPapers rap = new ReviewerViewAllocatedPapers(username);
+				ReviewerViewAllocatedPapers rap = new ReviewerViewAllocatedPapers(username,password);
 				rap.setVisible(true);
 			}
 		});
@@ -186,7 +191,7 @@ public class ReviewerHome extends JFrame {
 				ua.setVisible(true);
 			}
 		});
-		btnNewButton_2_1_1.setBounds(364, 449, 111, 23);
+		btnNewButton_2_1_1.setBounds(364, 449, 145, 23);
 		contentPane.add(btnNewButton_2_1_1);
 		
 		JButton btnNewButton_2_1_1_1 = new JButton("All Reviews");
@@ -196,7 +201,7 @@ public class ReviewerHome extends JFrame {
 				cr.setVisible(true);
 			}
 		});
-		btnNewButton_2_1_1_1.setBounds(595, 449, 111, 23);
+		btnNewButton_2_1_1_1.setBounds(509, 449, 179, 23);
 		contentPane.add(btnNewButton_2_1_1_1);
 		
 		JLabel workloadLabel = new JLabel("");
@@ -237,16 +242,15 @@ public class ReviewerHome extends JFrame {
 		btnNewButton_3.setBounds(223, 39, 69, 23);
 		contentPane.add(btnNewButton_3);
 		
-		JButton btnNewButton_2_1_1_1_1 = new JButton("View Bids");
-		btnNewButton_2_1_1_1_1.addActionListener(new ActionListener() {
+		JButton btnNewButton_2_1_1_1_2 = new JButton("Logout");
+		btnNewButton_2_1_1_1_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				LoginHome lh = new LoginHome();
+				lh.setVisible(true);
 			}
 		});
-		btnNewButton_2_1_1_1_1.setBounds(480, 449, 111, 23);
-		contentPane.add(btnNewButton_2_1_1_1_1);
-		
-		JButton btnNewButton_2_1_1_1_2 = new JButton("Logout");
-		btnNewButton_2_1_1_1_2.setBounds(709, 449, 111, 23);
+		btnNewButton_2_1_1_1_2.setBounds(688, 449, 132, 23);
 		contentPane.add(btnNewButton_2_1_1_1_2);
 	
 		JScrollPane scrollPane = new JScrollPane();
