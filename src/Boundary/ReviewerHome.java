@@ -29,6 +29,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EtchedBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ReviewerHome extends JFrame {
 
@@ -39,7 +41,12 @@ public class ReviewerHome extends JFrame {
 	private String choice;
 	private String paper;
 	private JTable bidsTable;
-
+	private String paperTitle;
+	private String paperId;
+	private ResultSet result3;
+	private ResultSet result4;
+	private ResultSet viewCurrentBids;
+	
 	public ReviewerHome(String username, String password){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 839, 542);
@@ -126,7 +133,7 @@ public class ReviewerHome extends JFrame {
 						if(rc.validateSubmitBid(paperId, reviewId, choice)) 
 						{
 							JOptionPane.showMessageDialog(null, "Inserted", "Information updated successfully", JOptionPane.INFORMATION_MESSAGE);
-							ResultSet result4 = rc.viewAllCurrentBids(testLbl.getText());
+							result4 = rc.viewAllCurrentBids(testLbl.getText());
 							onSuccessViewBids(result4);
 						}
 						else {
@@ -161,7 +168,20 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2 = new JButton("Delete Bids");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					ReviewerController rc = new ReviewerController();
+					viewCurrentBids = rc.viewAllCurrentBids(testLbl.getText());
+					if(rc.validateDeleteCurrentBids(paperId,testLbl.getText())) {
+						JOptionPane.showMessageDialog(null, "Delete current bids successful", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+						onSuccessViewBids(viewCurrentBids);
+						}
+					else {
+						JOptionPane.showMessageDialog(null, "Delete current bids failed", "ERROR", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		btnNewButton_2.setBounds(10, 263, 119, 23);
@@ -170,10 +190,31 @@ public class ReviewerHome extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 22, 308, 230);
 		panel_2.add(scrollPane_1);
-		
 		bidsTable = new JTable();
 		scrollPane_1.setViewportView(bidsTable);
 		
+		bidsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				int row = bidsTable.rowAtPoint(evt.getPoint());
+				int col = bidsTable.columnAtPoint(evt.getPoint());
+				
+				if(row >= 0 && col == 0) {
+					paperTitle = (String) bidsTable.getModel().getValueAt(row, col);
+					ReviewerController rc = new ReviewerController();
+					ResultSet getpId = rc.validatePaperIDRetrieve(paperTitle);
+					try {
+						if(getpId.next()) {
+							paperId = getpId.getString(1);
+						}
+					}
+					catch(Exception ex) {
+						JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.WARNING_MESSAGE);
+					}
+					
+				}
+			}
+		});
 		JButton btnNewButton_2_1 = new JButton("View Allocated Papers");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -275,7 +316,7 @@ public class ReviewerHome extends JFrame {
 			while(result2.next())
 			{
 			testLbl.setText(result2.getString("userId"));
-			ResultSet result3 = rc.viewAllCurrentBids(testLbl.getText());
+			result3 = rc.viewAllCurrentBids(testLbl.getText());
 			onSuccessViewBids(result3);
 			}
 		} catch (SQLException e1) {

@@ -29,6 +29,13 @@ public class Reviewers {
 		this.workload = workload;
 	}
 	
+	public boolean deleteCurrentBids(String paperId, String reviewerId)
+	{
+		String sqlStatement = "UPDATE bids SET `bidInfo` = 'No' WHERE `paperId`=? AND `reviewerId`=?";
+		String[] parameters = {paperId,reviewerId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	public boolean deleteReview(String paperId)
 	{
 		String sqlStatement = "DELETE from reviews WHERE paperId = ?";
@@ -88,7 +95,7 @@ public class Reviewers {
 	}
 	
 	public ResultSet currentBid (String reviewerId) {
-		String sqlStatement = "SELECT P.title FROM bids B JOIN papers P ON B.paperId = P.paperId WHERE B.bidInfo = 'Yes' AND B.reviewerId = (?);";
+		String sqlStatement = "SELECT P.title FROM bids B JOIN papers P ON B.paperId = P.paperId WHERE B.bidInfo = 'Yes' AND B.reviewerId = (?) AND B.bidStatus = 'Pending';";
 		String[] parameters = {reviewerId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;

@@ -114,6 +114,21 @@ public class ConferenceChair {
 		return result;
 	}
 	
+	public ResultSet searchReviewedPaperInfomation(String title) {
+		String sqlStatement = "SELECT R.*,P.title,U.name FROM allocated_papers A JOIN reviews R ON A.paperId = R.paperId JOIN papers P ON A.paperId = P.paperId JOIN users U ON A.reviewerId = U.userId WHERE A.reviewStatus = 'Reviewed' AND P.title = ?";
+		String[] parameters = {title};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public boolean submitPaperStatus (String paperId, String conferenceId, String choice) {
+		String sqlStatement = "INSERT INTO paper_status (`paperId`,`conferenceChairId`,`paperStatus`) VALUES (?,?,?) ";
+		String[] parameters = {paperId, conferenceId, choice};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	
 	private Connection dbConnection() {
 		
 	    Connection con = null;

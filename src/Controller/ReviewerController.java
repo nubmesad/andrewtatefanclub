@@ -87,6 +87,11 @@ public class ReviewerController {
 		return review.deleteReview(paperId);
 
 	}
+	public boolean validateDeleteCurrentBids(String paperId, String reviewerId) { 
+
+		return review.deleteCurrentBids(paperId,reviewerId);
+
+	}
 	public boolean validateUpdateReview(String rating, String reviews, String paperId) { 
 
 		return review.updateReview(rating,reviews,paperId);

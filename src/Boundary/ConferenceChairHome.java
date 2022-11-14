@@ -109,7 +109,7 @@ public class ConferenceChairHome extends JFrame {
 		panel.add(ReviewerComboBox);
 		
 		JButton btnViewAllBids = new JButton("View All Bids");
-		btnViewAllBids.setBounds(485, 473, 102, 23);
+		btnViewAllBids.setBounds(457, 473, 92, 23);
 		contentPane.add(btnViewAllBids);
 		
 		JButton btnViewReviewedPapers = new JButton("View Reviewed Papers");
@@ -120,7 +120,7 @@ public class ConferenceChairHome extends JFrame {
 			}
 		});
 		
-		btnViewReviewedPapers.setBounds(26, 471, 143, 25);
+		btnViewReviewedPapers.setBounds(26, 472, 401, 25);
 		contentPane.add(btnViewReviewedPapers);
 		
 		JButton btnLogout = new JButton("Logout");
@@ -332,7 +332,7 @@ public class ConferenceChairHome extends JFrame {
 				ua.setVisible(true);
 			}
 		});
-		updateButton.setBounds(597, 472, 102, 23);
+		updateButton.setBounds(597, 473, 102, 23);
 		contentPane.add(updateButton);
 
 		

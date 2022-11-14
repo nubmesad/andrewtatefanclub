@@ -39,6 +39,12 @@ public class ConferenceChairController {
         
     }
     
+    public ResultSet getReviewedPaperInfomation(String title) {
+
+        return conference.searchReviewedPaperInfomation(title);
+        
+    }
+    
     public Boolean insertAllocation(String paperId, String reviewerId) {
 
         return conference.manualAllocation(paperId,reviewerId);
@@ -87,4 +93,11 @@ public class ConferenceChairController {
         return conference.getReviewedPapers();
   
     }
+    
+    public Boolean insertStatus(String paperId, String conferenceId, String choice) {
+
+        return conference.submitPaperStatus(paperId,conferenceId,choice);
+        
+    }
+    
 }
