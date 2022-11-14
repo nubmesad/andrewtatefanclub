@@ -71,7 +71,7 @@ public class AuthorSubmitPaper extends JFrame {
 						{
 						if(ac.validateSubmitPaper(title, content))
 						{
-							JOptionPane.showMessageDialog(null, "Paper Submitted", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
+							JOptionPane.showMessageDialog(null, "Paper Submitted", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);	
 							dispose();
 							AuthorAddAuthors lh = new AuthorAddAuthors(username);
 							lh.setVisible(true);
