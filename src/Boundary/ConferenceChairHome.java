@@ -310,6 +310,14 @@ public class ConferenceChairHome extends JFrame {
 				} 
 				catch (SQLException e1) 
 				{
+					
+					
+					
+					
+					
+					
+					
+					
 					e1.printStackTrace();
 				}
 
