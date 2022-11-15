@@ -202,14 +202,20 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 					ResultSet rId = rc.validateIDRetrieve(username);
 					
 					if(getpId.next() && rId.next()) {
-						ResultSet result = rc.retrieveAllocatedBids(getpId.getString(1));
+						ResultSet result = rc.retrieveAllocatedBids(reviewerId);
 						if(rc.validateSubmitReview(getpId.getString(1),rating,textArea.getText(),rId.getString("userId")) && rc.validateUpdateStatus(getpId.getString(1))) {
 							JOptionPane.showMessageDialog(null, "Inserted", "Review added successfully", JOptionPane.INFORMATION_MESSAGE);
-							onSuccessViewBids(result);
+							
 							contentArea.setText(null);
 							titleLabel.setText(null);
 							authorLabel.setText(null);
+							textArea.setText(null);
 							
+							
+							if(result.next()) {
+								System.out.print(result.getString(1));
+								onSuccessViewBids(result);
+							}
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Error, Inserting failed", "ERROR", JOptionPane.WARNING_MESSAGE);

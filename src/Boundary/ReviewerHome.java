@@ -173,7 +173,9 @@ public class ReviewerHome extends JFrame {
 					viewCurrentBids = rc.viewAllCurrentBids(testLbl.getText());
 					if(rc.validateDeleteCurrentBids(paperId,testLbl.getText())) {
 						JOptionPane.showMessageDialog(null, "Delete current bids successful", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
-						onSuccessViewBids(viewCurrentBids);
+						if(viewCurrentBids.next()) {
+							onSuccessViewBids(viewCurrentBids);
+							}
 						}
 					else {
 						JOptionPane.showMessageDialog(null, "Delete current bids failed", "ERROR", JOptionPane.WARNING_MESSAGE);
