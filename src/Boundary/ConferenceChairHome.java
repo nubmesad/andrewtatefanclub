@@ -108,10 +108,6 @@ public class ConferenceChairHome extends JFrame {
 		ReviewerComboBox.setBounds(10, 25, 381, 22);
 		panel.add(ReviewerComboBox);
 		
-		JButton btnViewAllBids = new JButton("View All Bids");
-		btnViewAllBids.setBounds(457, 473, 92, 23);
-		contentPane.add(btnViewAllBids);
-		
 		JButton btnViewReviewedPapers = new JButton("View Reviewed Papers");
 		btnViewReviewedPapers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

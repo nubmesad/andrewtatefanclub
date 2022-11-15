@@ -63,6 +63,12 @@ public class ConferenceChairController {
         
     }
     
+    public Boolean removeAllocatedPapers(String paperId) {
+
+        return conference.deleteAllocatedPapers(paperId);
+        
+    }
+    
     public ResultSet validateIDRetrieve(String username) {
 		if(username.matches(".*")) {
 

@@ -129,6 +129,14 @@ public class ConferenceChair {
 	}
 	
 	
+	public boolean deleteAllocatedPapers (String paperId) {
+		String sqlStatement = "DELETE FROM `allocated_papers` WHERE `paperId` = ?";
+		String[] parameters = {paperId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
+	
+	
 	private Connection dbConnection() {
 		
 	    Connection con = null;

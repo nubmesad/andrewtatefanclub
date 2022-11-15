@@ -158,6 +158,9 @@ public class ConferenceChairViewReviewedPapers extends JFrame {
 					if(cc.insertStatus(paperId, getId.getString(1), choice))
 					{
 						JOptionPane.showMessageDialog(null, "Paper status submitted successfully!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);
+						cc.removeAllocatedPapers(paperId);
+						ResultSet reviewedPapers2 = cc.viewAllReviewedPapers();
+						onSuccessViewReviewedPapers(reviewedPapers2);
 					}
 					else
 					{
@@ -176,6 +179,7 @@ public class ConferenceChairViewReviewedPapers extends JFrame {
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 			}
 		});
 		btnBack.setBounds(589, 437, 72, 23);
