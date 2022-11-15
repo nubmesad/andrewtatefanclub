@@ -242,7 +242,7 @@ public class ReviewerHome extends JFrame {
 		JButton btnNewButton_2_1_1_1 = new JButton("All Reviews");
 		btnNewButton_2_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReviewerCommentPage cr = new ReviewerCommentPage();
+				ReviewerCommentPage cr = new ReviewerCommentPage(username,password);
 				cr.setVisible(true);
 			}
 		});

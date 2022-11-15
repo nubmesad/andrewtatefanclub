@@ -65,6 +65,13 @@ public class Reviewers {
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
+	public boolean submitComment(String paperId, String userId, String comment, String date )
+	{
+		String sqlStatement = "INSERT INTO reviews_comment (paperId, userId, comment, date) values (?,?,?,?)";
+		String[] parameters = {paperId, userId, comment, date};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	
 	public boolean updateAllocatedReviewed (String paperId) {
 		String sqlStatement = "UPDATE allocated_papers SET reviewStatus = 'Reviewed' WHERE `paperId` = ?";
@@ -134,6 +141,12 @@ public class Reviewers {
 		return result;
 	}
 	
+	public ResultSet viewComment (String paperId) {
+		String sqlStatement = "SELECT userId,comment,date FROM `reviews_comment` WHERE paperId = ?";
+		String[] parameters = {paperId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
 	
 	public ResultSet searchpaperID (String title) {
 		String sqlStatement = "SELECT paperId FROM papers WHERE title = ?";
@@ -141,7 +154,19 @@ public class Reviewers {
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
 	}
+	public ResultSet reviewsComboBox() {
+		String sqlStatement = "SELECT P.title FROM reviews B JOIN papers P ON B.paperId = P.paperId";
+		String [] parameters = {};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
 	
+	public ResultSet viewOtherReviews(String title) {
+		String sqlStatement = "SELECT * FROM reviews B JOIN papers P ON B.paperId = P.paperId WHERE P.title = ?";
+		String [] parameters = {title};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
 	
 	private Connection dbConnection() {
 		

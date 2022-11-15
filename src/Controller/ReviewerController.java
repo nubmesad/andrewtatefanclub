@@ -60,6 +60,20 @@ public class ReviewerController {
     	
         return review.viewReview(paperId);
 	}
+    
+    public ResultSet retrieveComments(String paperId) {
+    	
+        return review.viewComment(paperId);
+	}
+
+    public ResultSet retrieveReviewsPaperId() {
+    	
+        return review.reviewsComboBox();
+	}
+    public ResultSet retrieveOtherReviews(String title) {
+    	
+        return review.viewOtherReviews(title);
+	}
  
 	public boolean validateSubmitBid(String paperId, String reviewerId, String bidInfo) { 
 
@@ -71,6 +85,11 @@ public class ReviewerController {
 			return review.submitReview(paperId, rating, reviews, reviewerId);
 
 	}
+	public boolean validateSubmitComment(String paperId, String userId, String comment, String date) { 
+
+		return review.submitComment(paperId, userId, comment, date);
+
+}
 	public boolean validateUpdateStatus(String paperId) { 
 
 		return review.updateAllocatedReviewed(paperId);
