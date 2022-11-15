@@ -165,8 +165,8 @@ public class ReviewerHome extends JFrame {
 		panel_2.setLayout(null);
 	
 		
-		JButton btnNewButton_2 = new JButton("Delete Bids");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton deleteBtn = new JButton("Delete Bids");
+		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ReviewerController rc = new ReviewerController();
@@ -186,8 +186,8 @@ public class ReviewerHome extends JFrame {
 				}
 			}
 		});
-		btnNewButton_2.setBounds(10, 263, 119, 23);
-		panel_2.add(btnNewButton_2);
+		deleteBtn.setBounds(10, 263, 119, 23);
+		panel_2.add(deleteBtn);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 22, 308, 230);
@@ -217,6 +217,8 @@ public class ReviewerHome extends JFrame {
 				}
 			}
 		});
+		
+		
 		JButton btnNewButton_2_1 = new JButton("View Allocated Papers");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -258,8 +260,8 @@ public class ReviewerHome extends JFrame {
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		
-		JButton btnNewButton_3 = new JButton("Set");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton setBtn = new JButton("Set");
+		setBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ReviewerController rc = new ReviewerController();
@@ -282,8 +284,8 @@ public class ReviewerHome extends JFrame {
 				}
 			}
 		});
-		btnNewButton_3.setBounds(223, 39, 69, 23);
-		contentPane.add(btnNewButton_3);
+		setBtn.setBounds(223, 39, 69, 23);
+		contentPane.add(setBtn);
 		
 		JButton btnNewButton_2_1_1_1_2 = new JButton("Logout");
 		btnNewButton_2_1_1_1_2.addActionListener(new ActionListener() {

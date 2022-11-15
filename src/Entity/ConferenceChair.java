@@ -101,7 +101,7 @@ public class ConferenceChair {
 	}
 	
 	public ResultSet autoAllocationSearchPaperId (String reviewerId) {
-		String sqlStatement = "SELECT `paperId` FROM `bids` WHERE reviewerId = ? AND bidStatus = 'Pending'";
+		String sqlStatement = "SELECT `paperId` FROM `bids` WHERE reviewerId = ? AND bidStatus = 'Pending' AND bidInfo = 'Yes'";
 		String[] parameters = {reviewerId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;
