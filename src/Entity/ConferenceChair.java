@@ -144,7 +144,7 @@ public class ConferenceChair {
 	}
 	
 	public ResultSet searchPaperListForNotifying (String userId) {
-		String sqlStatement = "SELECT PS.paperId , P.title, PA.submittedId, PS.paperStatus FROM paper_status PS JOIN papers P ON PS.paperId = P.paperId JOIN paper_authors PA ON PS.paperId = PA.paperId WHERE PS.conferenceChairId = ? AND PS.notifyStatus = 'Pending'";
+		String sqlStatement = "SELECT PS.paperId , P.title, PA.authorId, PS.paperStatus FROM paper_status PS JOIN papers P ON PS.paperId = P.paperId JOIN paper_authors PA ON PS.paperId = PA.paperId WHERE PS.conferenceChairId = ? AND PS.notifyStatus = 'Pending'";
 		String[] parameters = {userId};
 		ResultSet result = queryHelper(sqlStatement, parameters);
 		return result;

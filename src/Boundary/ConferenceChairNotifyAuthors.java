@@ -31,6 +31,7 @@ public class ConferenceChairNotifyAuthors extends JFrame {
 	private String conferenceId;
 	private String authorId;
 	private String paperId;
+	private String getId;
 	
 	public ConferenceChairNotifyAuthors(String username) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,8 +101,9 @@ public class ConferenceChairNotifyAuthors extends JFrame {
 		        
 		        if (row >= 0 && col >= 0) 
 		        {	
-		        	String getId = (String) arTable.getModel().getValueAt(row, col);
+		        	getId = (String) arTable.getModel().getValueAt(row, col);
 		        	paperId = (String) arTable.getModel().getValueAt(row, 0);
+		        	System.out.println(getId);
 					ResultSet emailSet = cc.getAuthorEmail(getId);
 					
 					try 
@@ -124,27 +126,28 @@ public class ConferenceChairNotifyAuthors extends JFrame {
 		notifyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				ResultSet paperList = cc.getPaperNotifyList(conferenceId);	
-				try {
-					paperList.next();
-					authorId=paperList.getString(3);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				
-				if("".equals(messageTextArea.getText()))
-				{
-					JOptionPane.showMessageDialog(null, "Dont leave textarea empty la", "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
-				else if (cc.sendEmail(conferenceId, authorId, messageTextArea.getText()) && cc.sendEmailStatus(paperId,conferenceId))
-				{
-					JOptionPane.showMessageDialog(null, "Inserted Successfully!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
-					onSuccess(paperList);
-				}
+					if (cc.sendEmail(conferenceId, getId, messageTextArea.getText()) && cc.sendEmailStatus(paperId,conferenceId))
+					{
+						JOptionPane.showMessageDialog(null, "Inserted Successfully!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+						ResultSet paperList = cc.getPaperNotifyList(conferenceId);	
+						onSuccess(paperList);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Insert Failed", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}			
 			}
 		});
 		notifyBtn.setBounds(529, 414, 71, 20);
 		panel.add(notifyBtn);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnBack.setBounds(10, 476, 71, 20);
+		contentPane.add(btnBack);
 	}
 	
 	private void onSuccess(ResultSet result) {
@@ -160,7 +163,7 @@ public class ConferenceChairNotifyAuthors extends JFrame {
 		model.addColumn("Paper Status");
 		try {
 			while(result != null && result.next()) {
-				model.addRow(new Object[] {result.getString("paperId"),result.getString("title"),result.getString("submittedId"),result.getString("paperStatus")});
+				model.addRow(new Object[] {result.getString("paperId"),result.getString("title"),result.getString("authorId"),result.getString("paperStatus")});
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);

@@ -30,6 +30,34 @@ public class Authors {
 		return rs;
 	}
 	
+	public ResultSet viewReviewsPA(String authorId) {
+		String sqlStatement = "SELECT PA.paperId FROM paper_authors PA JOIN users U ON PA.authorId = U.userId WHERE U.userId = ?";
+		String [] parameters = {authorId};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
+	
+	public ResultSet viewReviewerReviews(String paperId) {
+		String sqlStatement = "SELECT R.*, P.title FROM reviews R JOIN papers P ON R.paperId = P.paperId WHERE R.paperId = ?";
+		String [] parameters = {paperId};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
+	
+	public ResultSet viewReviewerInformation(String title) {
+		String sqlStatement = "SELECT R.*, P.title, U.name FROM reviews R JOIN papers P ON R.paperId = P.paperId JOIN users U ON R.reviewerId = U.userId WHERE P.title = ?";
+		String [] parameters = {title};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
+	
+	public ResultSet viewEmails(String authorId) {
+		String sqlStatement = "SELECT U.name,E.message FROM email E JOIN users U ON E.conferenceChairId = U.userId WHERE authorId = ?";
+		String [] parameters = {authorId};
+		ResultSet rs = queryHelper(sqlStatement, parameters);
+		return rs;
+	}
+	
 	
 	public ResultSet searchID (String username) {
 		String sqlStatement = "SELECT * FROM users WHERE username=?";
@@ -55,6 +83,13 @@ public class Authors {
 		String sqlStatement = "UPDATE users SET username = ?, password = ?, email = ? WHERE userID=?";
 		String[] parameters = {username,password,email,userID};
 		int rows = createUpdateHelper(sqlStatement,parameters);
+		return rows>0;
+	}
+	
+	public boolean submitAuthorRating(String reviewerId, String paperId, String rating) {
+		String sqlStatement = "INSERT INTO authors_rating (`reviewerId`,`paperId`,`rating`) VALUES (?,?,?) ";
+		String[] parameters = {reviewerId,paperId,rating};
+		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
 	}
 

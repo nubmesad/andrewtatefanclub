@@ -27,6 +27,22 @@ public class AuthorController
 		return authors.authorNameComboBox();
 	}
     
+	public ResultSet retrieveEmail(String authorId) {
+		return authors.viewEmails(authorId);
+	}
+	
+	public ResultSet retrieveReviewsPA(String authorId) {
+		return authors.viewReviewsPA(authorId);
+	}
+	
+	public ResultSet retrieveReviewerReviews(String paperId) {
+		return authors.viewReviewerReviews(paperId);
+	}
+	
+	public ResultSet retrieveReviewerInformation(String title) {
+		return authors.viewReviewerInformation(title);
+	}
+	
 	public ResultSet retrievePaperID() {
 		return paper.getLastPaperID();
 	}
@@ -69,6 +85,11 @@ public class AuthorController
 		
     		return paper.createPA(paperId, submittedId, authorId);
 	}  
+	
+	public boolean validateSubmitAuthorRating(String reviewerId, String paperId,String rating) { 
+		
+		return authors.submitAuthorRating(reviewerId, paperId, rating);
+}  
 	
 	
     public ResultSet validateIDRetrieve(String username) {
