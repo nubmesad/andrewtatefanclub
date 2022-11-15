@@ -106,4 +106,24 @@ public class ConferenceChairController {
         
     }
     
+    public ResultSet getPaperNotifyList(String userId) {
+
+        return conference.searchPaperListForNotifying(userId);
+        
+    }
+    public ResultSet getAuthorEmail(String userId) {
+
+        return conference.searchEmail(userId);
+    }
+    
+    public Boolean sendEmail(String conferenceId, String authorId, String message){
+
+        return conference.submitEmail(conferenceId, authorId, message);
+        
+    }
+    public Boolean sendEmailStatus(String paperId, String conferenceId){
+
+        return conference.updateEmailStatus(paperId, conferenceId);
+        
+    }
 }

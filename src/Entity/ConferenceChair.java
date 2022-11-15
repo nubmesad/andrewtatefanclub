@@ -57,6 +57,13 @@ public class ConferenceChair {
 		return result;
 	}
 	
+	public ResultSet searchEmail (String id) {
+		String sqlStatement = "SELECT email FROM users WHERE userId=?";
+		String[] parameters = {id};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
 	public ResultSet searchPaperID (String title) {
 		String sqlStatement = "SELECT paperId FROM papers WHERE title=?";
 		String[] parameters = {title};
@@ -122,7 +129,7 @@ public class ConferenceChair {
 	}
 	
 	public boolean submitPaperStatus (String paperId, String conferenceId, String choice) {
-		String sqlStatement = "INSERT INTO paper_status (`paperId`,`conferenceChairId`,`paperStatus`) VALUES (?,?,?) ";
+		String sqlStatement = "INSERT INTO paper_status (`paperId`,`conferenceChairId`,`paperStatus`,`notifyStatus`) VALUES (?,?,?,'Pending') ";
 		String[] parameters = {paperId, conferenceId, choice};
 		int rows = createUpdateHelper(sqlStatement, parameters);
 		return rows>0;
@@ -136,6 +143,28 @@ public class ConferenceChair {
 		return rows>0;
 	}
 	
+	public ResultSet searchPaperListForNotifying (String userId) {
+		String sqlStatement = "SELECT PS.paperId , P.title, PA.submittedId, PS.paperStatus FROM paper_status PS JOIN papers P ON PS.paperId = P.paperId JOIN paper_authors PA ON PS.paperId = PA.paperId WHERE PS.conferenceChairId = ? AND PS.notifyStatus = 'Pending'";
+		String[] parameters = {userId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
+	public boolean submitEmail(String conferenceId, String authorId, String message)
+	{
+		String sqlStatement = "INSERT INTO `email` (conferenceChairId, authorId, message) VALUES (?,?,?)";
+		String[] parameters = {conferenceId, authorId, message};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;	
+	}
+	
+	public boolean updateEmailStatus(String paperId, String conferenceId)
+	{
+		String sqlStatement = "UPDATE paper_status SET notifyStatus ='Sent' WHERE paperId = ?  AND conferenceChairId = ?";
+		String[] parameters = {paperId, conferenceId};
+		int rows = createUpdateHelper(sqlStatement, parameters);
+		return rows>0;
+	}
 	
 	private Connection dbConnection() {
 		

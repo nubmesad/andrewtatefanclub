@@ -127,7 +127,7 @@ public class ConferenceChairHome extends JFrame {
 				lh.setVisible(true);
 			}
 		});
-		btnLogout.setBounds(709, 473, 91, 23);
+		btnLogout.setBounds(699, 473, 102, 23);
 		contentPane.add(btnLogout);
 		
 		JLabel lblNewLabel_1 = new JLabel("Welcome user: ");
@@ -336,8 +336,18 @@ public class ConferenceChairHome extends JFrame {
 				ua.setVisible(true);
 			}
 		});
-		updateButton.setBounds(597, 473, 102, 23);
+		updateButton.setBounds(573, 473, 116, 23);
 		contentPane.add(updateButton);
+		
+		JButton notifyBtn = new JButton("Notify Author");
+		notifyBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConferenceChairNotifyAuthors ua = new ConferenceChairNotifyAuthors(username);
+				ua.setVisible(true);
+			}
+		});
+		notifyBtn.setBounds(447, 473, 116, 23);
+		contentPane.add(notifyBtn);
 
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
