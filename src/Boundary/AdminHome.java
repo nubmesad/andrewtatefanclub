@@ -46,7 +46,7 @@ public class AdminHome extends JFrame {
 
 	public AdminHome(String username, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 822, 542);
+		setBounds(100, 100, 824, 542);
 		contentPane = new JPanel();
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 
@@ -113,7 +113,7 @@ public class AdminHome extends JFrame {
 
 					if(validateUI(username, password)) {
 						AdminController admincontroller = new AdminController();
-						if(admincontroller.validateRegister(id, username, password, email, name, accType)) {
+						if(admincontroller.validateRegister(id, username, password, name, email, accType)) {
 							JOptionPane.showMessageDialog(null, "Account Registered!", "SUCESS", JOptionPane.INFORMATION_MESSAGE);	
 							AdminController ai = new AdminController();
 							ResultSet result = ai.retrieveUserTable();

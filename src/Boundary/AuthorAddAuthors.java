@@ -154,7 +154,7 @@ public class AuthorAddAuthors extends JFrame {
 						}
 						else 
 						{
-							JOptionPane.showMessageDialog(null,"2r32 Field", "FAILED", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(null,"Author added already!", "FAILED", JOptionPane.WARNING_MESSAGE);
 						}
 					}
 					else 

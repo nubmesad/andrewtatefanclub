@@ -76,10 +76,14 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 		btnNewButton_1.setBounds(271, 449, 91, 23);
 		panel.add(btnNewButton_1);
 		
-		JTextArea contentArea = new JTextArea();
-		contentArea.setEditable(false);
-		contentArea.setBounds(10, 192, 352, 247);
-		panel.add(contentArea);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 192, 352, 247);
+		panel.add(scrollPane_1);
+		
+		JTextArea contentArea_1 = new JTextArea();
+		contentArea_1.setLineWrap(true);
+		scrollPane_1.setViewportView(contentArea_1);
+		contentArea_1.setEditable(false);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Paper Information", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -205,7 +209,7 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 						if(rc.validateSubmitReview(getpId.getString(1),rating,textArea.getText(),rId.getString("userId")) && rc.validateUpdateStatus(getpId.getString(1))) {
 							JOptionPane.showMessageDialog(null, "Inserted", "Review added successfully", JOptionPane.INFORMATION_MESSAGE);
 							
-							contentArea.setText(null);
+							contentArea_1.setText(null);
 							titleLabel.setText(null);
 							authorLabel.setText(null);
 							textArea.setText(null);
@@ -268,7 +272,7 @@ public class ReviewerViewAllocatedPapers extends JFrame {
 					try {
 						if(getContent.next()) {
 							System.out.printf(getContent.getString(1));
-							contentArea.setText(getContent.getString(1));
+							contentArea_1.setText(getContent.getString(1));
 							
 						}
 						else {

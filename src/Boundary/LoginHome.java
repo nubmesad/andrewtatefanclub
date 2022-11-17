@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -77,7 +78,7 @@ public class LoginHome extends JFrame {
 		lblNewLabel_2.setBounds(184, 141, 77, 32);
 		contentPane.add(lblNewLabel_2);
 		
-		passwordTextField = new JTextField();
+		passwordTextField = new JPasswordField();
 		passwordTextField.setBounds(255, 147, 106, 20);
 		contentPane.add(passwordTextField);
 		passwordTextField.setColumns(10);

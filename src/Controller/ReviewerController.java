@@ -117,8 +117,13 @@ public class ReviewerController {
 
 	}
   
-    
 	public boolean validateReviewWorkload(String userId,String workload) {
     		return review.workload(userId, workload);
 	}
+	
+    public ResultSet getBidsResult(String reviewId) {
+    	
+        return review.viewBidsResult(reviewId);
+	}
+	
 }

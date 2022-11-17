@@ -58,6 +58,7 @@ public class ReviewerCommentPage extends JFrame {
 		contentPane.add(panel_1_1);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setEditable(false);
 		textArea.setBounds(10, 21, 412, 150);
 		panel_1_1.add(textArea);

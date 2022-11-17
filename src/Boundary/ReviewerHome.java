@@ -309,6 +309,16 @@ public class ReviewerHome extends JFrame {
 		lblWelcomeUser.setBounds(644, 11, 111, 23);
 		contentPane.add(lblWelcomeUser);
 		
+		JButton bidsBtn = new JButton("View Bids");
+		bidsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReviewerViewBidsResult rvb = new ReviewerViewBidsResult(username);
+				rvb.setVisible(true);
+			}
+		});
+		bidsBtn.setBounds(726, 39, 91, 23);
+		contentPane.add(bidsBtn);
+		
 
 
 		ReviewerController rc = new ReviewerController();

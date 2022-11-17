@@ -83,7 +83,7 @@ public class AuthorHome extends JFrame {
 		panel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(27, 25, 706, 286);
+		scrollPane.setBounds(10, 37, 706, 286);
 		panel.add(scrollPane);
 		
 		reviewTable = new JTable();

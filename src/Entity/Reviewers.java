@@ -168,6 +168,13 @@ public class Reviewers {
 		return rs;
 	}
 	
+	public ResultSet viewBidsResult (String reviewId) {
+		String sqlStatement = "SELECT B.paperId, P.title, B.bidInfo, B.bidStatus FROM bids B JOIN papers P ON B.paperId = p.paperId WHERE B.reviewerId = ? AND B.bidInfo = 'Yes' AND B.bidStatus = 'Success' OR B.reviewerId = ? AND B.bidInfo = 'Yes' AND B.bidStatus = 'Pending'";
+		String[] parameters = {reviewId, reviewId};
+		ResultSet result = queryHelper(sqlStatement, parameters);
+		return result;
+	}
+	
 	private Connection dbConnection() {
 		
 	    Connection con = null;
